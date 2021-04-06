@@ -59,8 +59,8 @@ public class PrimaryController implements Initializable {
                 cb.setDepart(rs1.getString("sanbay"));
             }
             stm1.close();
-//            cb.setArrive(rs.getString("arrive"));
-//            cb.setDepart(rs.getString("depart"));
+//          cb.setArrive(rs.getString("arrive"));
+//          cb.setDepart(rs.getString("depart"));
             cb.setDaytime(rs.getString("daytime"));
             cb.setTimeflight(rs.getString("timeflight"));
             lcb.add(cb);
@@ -103,7 +103,7 @@ public class PrimaryController implements Initializable {
             cell.setGraphic(bt);
             return cell;
         });
-        
+          
         this.tbCb.setItems((ObservableList<Chuyenbay>) getChuyenbays());
 //        this.tbCb.getColumns().addAll(colMa, colArrive, colDepart, colDayTime, colTimeFlight); 
         this.tbCb.getColumns().addAll(colMa, colArrive, colDepart,  colDayTime, colTimeFlight, colDatve); 
