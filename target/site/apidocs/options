@@ -1,0 +1,26 @@
+--class-path
+'/Users/duytruong/.m2/repository/mysql/mysql-connector-java/8.0.23/mysql-connector-java-8.0.23.jar:/Users/duytruong/.m2/repository/com/google/protobuf/protobuf-java/3.11.4/protobuf-java-3.11.4.jar:/Users/duytruong/.m2/repository/org/openjfx/javafx-controls/13/javafx-controls-13.jar:/Users/duytruong/.m2/repository/org/openjfx/javafx-graphics/13/javafx-graphics-13.jar:/Users/duytruong/.m2/repository/org/openjfx/javafx-base/13/javafx-base-13.jar:/Users/duytruong/.m2/repository/org/openjfx/javafx-fxml/13/javafx-fxml-13.jar'
+--module-path
+'/Users/duytruong/.m2/repository/org/openjfx/javafx-fxml/13/javafx-fxml-13-mac.jar:/Users/duytruong/.m2/repository/org/openjfx/javafx-base/13/javafx-base-13-mac.jar:/Users/duytruong/.m2/repository/org/openjfx/javafx-controls/13/javafx-controls-13-mac.jar:/Users/duytruong/.m2/repository/org/openjfx/javafx-graphics/13/javafx-graphics-13-mac.jar'
+--patch-module
+com.team.btlon='/Users/duytruong/NetBeansProjects/ktpm/src/main/java'
+-encoding
+'UTF-8'
+-protected
+--module-source-path
+'/Users/duytruong/NetBeansProjects/ktpm/target/site/apidocs/src'
+-author
+-bottom
+'Copyright &#169; 2021. All rights reserved.'
+-charset
+'UTF-8'
+-d
+'/Users/duytruong/NetBeansProjects/ktpm/target/site/apidocs'
+-docencoding
+'UTF-8'
+-doctitle
+'btlon 1.0-SNAPSHOT API'
+-use
+-version
+-windowtitle
+'btlon 1.0-SNAPSHOT API'

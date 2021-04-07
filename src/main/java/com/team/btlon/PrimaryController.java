@@ -5,6 +5,7 @@ import com.team.service.JdbcUtils;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -14,6 +15,7 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.collections.FXCollections;
+import static javafx.collections.FXCollections.observableArrayList;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -30,13 +32,9 @@ public class PrimaryController implements Initializable {
     @FXML private TextField txtArrive;
     @FXML private TextField txtDepart;
     @FXML private TableView<Chuyenbay> tbCb;
-    @FXML private TableColumn colMa;
-    @FXML private TableColumn colArrive;
-    @FXML private TableColumn colDepart; 
-    @FXML private TableColumn colDaytime;
-    @FXML private TableColumn colTimeFlight;
     
-    @FXML private void btEvent (ActionEvent event) {
+    @FXML private void btSearch (ActionEvent event) {
+        
         
     }
     
@@ -59,8 +57,6 @@ public class PrimaryController implements Initializable {
                 cb.setDepart(rs1.getString("sanbay"));
             }
             stm1.close();
-//          cb.setArrive(rs.getString("arrive"));
-//          cb.setDepart(rs.getString("depart"));
             cb.setDaytime(rs.getString("daytime"));
             cb.setTimeflight(rs.getString("timeflight"));
             lcb.add(cb);
@@ -70,6 +66,31 @@ public class PrimaryController implements Initializable {
         conn.close();
         
         return FXCollections.observableArrayList(lcb);
+    }
+    
+    private List<Chuyenbay> getChuyenbayByArrive(String kw) throws SQLException {
+        String sql = "SELECT * FROM sanbay";
+        if (!kw.isEmpty())
+            sql += "WHERE sanbay like ?";
+        Connection conn = JdbcUtils.getConn();
+        PreparedStatement ps = conn.prepareStatement(sql);
+        if (!kw.isEmpty())
+            ps.setString(1, String.format("%%%s%%", kw));
+        ResultSet rs = ps.executeQuery();
+        List <Chuyenbay> lcba = new ArrayList<>();
+        while (rs.next()) {
+            Statement st1 = conn.createStatement();
+            ResultSet rs1 = st1.executeQuery("SELECT * FROM chuyenbay WHERE arrive_id = " + rs.getString("id_sanbay"));
+            while (rs1.next()) {
+                lcba.add(new Chuyenbay(rs1.getString("ma"), rs1.getString("arrive_id"), 
+                        rs1.getString("depart_id"), rs1.getString("daytime"), rs1.getString("timeflight")));
+            }
+            st1.close();
+        }
+        ps.close();
+        conn.close();
+        
+        return FXCollections.observableArrayList(lcba);   
     }
     
     private void loadChuyenbay() throws SQLException {
@@ -93,7 +114,7 @@ public class PrimaryController implements Initializable {
             Button bt = new Button("Dat ve");
             bt.setOnAction(et -> {
                 try {
-                    App.setRoot("primary");
+                    App.setRoot("secondary");
                 } catch (IOException ex) {
                     Logger.getLogger(PrimaryController.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -105,7 +126,6 @@ public class PrimaryController implements Initializable {
         });
           
         this.tbCb.setItems((ObservableList<Chuyenbay>) getChuyenbays());
-//        this.tbCb.getColumns().addAll(colMa, colArrive, colDepart, colDayTime, colTimeFlight); 
         this.tbCb.getColumns().addAll(colMa, colArrive, colDepart,  colDayTime, colTimeFlight, colDatve); 
     }
 
@@ -116,5 +136,14 @@ public class PrimaryController implements Initializable {
         } catch (SQLException ex) {
             Logger.getLogger(PrimaryController.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        this.txtArrive.textProperty().addListener(et -> {
+            this.tbCb.getItems().clear();
+            try {
+                this.tbCb.setItems((ObservableList<Chuyenbay>) getChuyenbayByArrive(this.txtArrive.getText()));
+            } catch (SQLException ex) {
+                Logger.getLogger(PrimaryController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        });
     }
 }

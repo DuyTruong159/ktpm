@@ -15,3 +15,7 @@ GridPane {
 Label {
     -fx-font-weight: bold;
 }
+
+GridPane {
+    -fx-hgap: 20;
+}

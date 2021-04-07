@@ -18,12 +18,14 @@ public class App extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         scene = new Scene(loadFXML("primary"), 640, 480);
+        scene.getStylesheets().add("file:/Users/duytruong/NetBeansProjects/ktpm/target/java/com/team/btlon/Style.css");
         stage.setScene(scene);
         stage.show();
     }
 
     static void setRoot(String fxml) throws IOException {
         scene.setRoot(loadFXML(fxml));
+        
     }
 
     private static Parent loadFXML(String fxml) throws IOException {
