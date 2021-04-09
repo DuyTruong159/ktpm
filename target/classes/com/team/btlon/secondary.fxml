@@ -1,16 +1,107 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Button?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.paint.LinearGradient?>
+<?import javafx.scene.paint.Stop?>
+<?import javafx.scene.text.Font?>
 
-<VBox alignment="CENTER" spacing="20.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.team.btlon.SecondaryController">
-    <children>
-        <Label text="Secondary View" />
-        <Button fx:id="secondaryButton" text="Switch to Primary View" onAction="#switchToPrimary" />
-    </children>
-    <padding>
-        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-    </padding>
-</VBox>
+<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="354.0" prefWidth="733.0" stylesheets="@../../../../java/com/team/btlon/Style.css" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.team.btlon.SecondaryController">
+  <columnConstraints>
+    <ColumnConstraints hgrow="SOMETIMES" maxWidth="444.0" minWidth="10.0" prefWidth="214.21839904785156" />
+    <ColumnConstraints hgrow="SOMETIMES" maxWidth="477.7787628173828" minWidth="10.0" prefWidth="220.78160095214844" />
+      <ColumnConstraints hgrow="SOMETIMES" maxWidth="424.0" minWidth="0.0" prefWidth="234.87026977539062" />
+  </columnConstraints>
+  <rowConstraints>
+    <RowConstraints maxHeight="129.0" minHeight="9.0" prefHeight="78.95896911621094" vgrow="SOMETIMES" />
+    <RowConstraints maxHeight="312.0" minHeight="10.0" prefHeight="90.04434204101562" vgrow="SOMETIMES" />
+    <RowConstraints maxHeight="296.0" minHeight="10.0" prefHeight="67.95565795898438" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="296.0" minHeight="10.0" prefHeight="98.68629455566406" vgrow="SOMETIMES" />
+  </rowConstraints>
+   <children>
+      <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="63.0" prefWidth="752.0" text=" Travel &amp; Go" textAlignment="CENTER" GridPane.columnSpan="3">
+         <font>
+            <Font size="50.0" />
+         </font>
+         <textFill>
+            <LinearGradient endX="0.8221153846153846" endY="0.1298076923076923" startX="0.17307692307692307" startY="0.1778846153846154">
+               <stops>
+                  <Stop>
+                     <color>
+                        <Color red="1.0" />
+                     </color>
+                  </Stop>
+                  <Stop offset="1.0">
+                     <color>
+                        <Color red="0.11597222089767456" green="1.0" blue="0.0694444477558136" />
+                     </color>
+                  </Stop>
+               </stops>
+            </LinearGradient>
+         </textFill>
+      </Label>
+      <TextField prefHeight="28.0" prefWidth="184.0" promptText="Username" GridPane.rowIndex="1">
+         <GridPane.margin>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </GridPane.margin>
+      </TextField>
+      <TextField promptText="Stk" GridPane.columnIndex="1" GridPane.rowIndex="1">
+         <GridPane.margin>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </GridPane.margin>
+      </TextField>
+      <RadioButton fx:id="rbFirstclass" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="27.0" prefWidth="114.0" text="First Class" GridPane.rowIndex="2">
+         <GridPane.margin>
+            <Insets left="10.0" />
+         </GridPane.margin>
+         <font>
+            <Font size="18.0" />
+         </font>
+         <toggleGroup>
+            <ToggleGroup fx:id="chair" />
+         </toggleGroup>
+      </RadioButton>
+      <RadioButton fx:id="rdSecondclass" mnemonicParsing="false" prefHeight="24.0" prefWidth="138.0" text="Second Class" toggleGroup="$chair" GridPane.columnIndex="1" GridPane.rowIndex="2">
+         <font>
+            <Font size="18.0" />
+         </font>
+         <GridPane.margin>
+            <Insets left="20.0" />
+         </GridPane.margin>
+      </RadioButton>
+      <Label alignment="CENTER" prefHeight="40.0" prefWidth="272.0" styleClass="showPrice" textAlignment="CENTER" GridPane.columnIndex="2" GridPane.rowIndex="2">
+         <GridPane.margin>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </GridPane.margin>
+      </Label>
+      <Button mnemonicParsing="false" onAction="#btBack" prefHeight="32.0" prefWidth="62.0" text="&lt;- Back" GridPane.rowIndex="3">
+         <GridPane.margin>
+            <Insets top="50.0" />
+         </GridPane.margin>
+      </Button>
+      <Button mnemonicParsing="false" prefHeight="38.0" prefWidth="296.0" styleClass="btCreate" text="Click here if you don't have account !" textAlignment="CENTER" GridPane.columnIndex="2" GridPane.rowIndex="3">
+         <GridPane.margin>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </GridPane.margin>
+      </Button>
+      <Button alignment="CENTER" contentDisplay="RIGHT" mnemonicParsing="false" prefHeight="35.0" prefWidth="83.0" text="Purchase" GridPane.columnIndex="1" GridPane.rowIndex="3">
+         <GridPane.margin>
+            <Insets top="50.0" />
+         </GridPane.margin>
+      </Button>
+   </children>
+   <opaqueInsets>
+      <Insets />
+   </opaqueInsets>
+   <padding>
+      <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+   </padding>
+</GridPane>

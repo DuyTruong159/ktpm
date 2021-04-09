@@ -19,3 +19,11 @@ Label {
 GridPane {
     -fx-hgap: 20;
 }
+
+.btCreate {
+    -fx-border-color: blue;
+}
+
+.showPrice {
+    -fx-background-color: white;
+}
