@@ -69,28 +69,67 @@ public class PrimaryController implements Initializable {
     }
     
     private List<Chuyenbay> getChuyenbayByArrive(String kw) throws SQLException {
-        String sql = "SELECT * FROM sanbay";
-        if (!kw.isEmpty())
-            sql += "WHERE sanbay like ?";
         Connection conn = JdbcUtils.getConn();
-        PreparedStatement ps = conn.prepareStatement(sql);
-        if (!kw.isEmpty())
-            ps.setString(1, String.format("%%%s%%", kw));
-        ResultSet rs = ps.executeQuery();
-        List <Chuyenbay> lcba = new ArrayList<>();
-        while (rs.next()) {
-            Statement st1 = conn.createStatement();
-            ResultSet rs1 = st1.executeQuery("SELECT * FROM chuyenbay WHERE arrive_id = " + rs.getString("id_sanbay"));
+        PreparedStatement stm = conn.prepareStatement("SELECT * FROM sanbay WHERE sanbay like concat ('%', ? ,'%')");
+        stm.setString(1, kw);
+        ResultSet rs = stm.executeQuery();
+        List<Chuyenbay> lcb = new ArrayList<>();
+        
+        while(rs.next()) {
+            Statement stm1 = conn.createStatement();
+            ResultSet rs1 = stm1.executeQuery("SELECT * FROM chuyenbay WHERE arrive_id = " + rs.getString("id_sanbay"));
             while (rs1.next()) {
-                lcba.add(new Chuyenbay(rs1.getString("ma"), rs1.getString("arrive_id"), 
-                        rs1.getString("depart_id"), rs1.getString("daytime"), rs1.getString("timeflight")));
+                Chuyenbay cb = new Chuyenbay();
+                cb.setMa(rs1.getString("ma"));
+                cb.setArrive(rs.getString("sanbay"));
+                Statement stm2 = conn.createStatement();
+                ResultSet rs2 = stm2.executeQuery("SELECT * FROM sanbay WHERE id_sanbay = " + rs1.getString("depart_id"));
+                while(rs2.next()) {
+                    cb.setDepart(rs2.getString("sanbay"));
+                }
+                cb.setDaytime(rs1.getString("daytime"));
+                cb.setTimeflight(rs1.getString("timeflight"));
+                lcb.add(cb);
             }
-            st1.close();
+            stm1.close();
         }
-        ps.close();
+        
+        stm.close();
         conn.close();
         
-        return FXCollections.observableArrayList(lcba);   
+        return FXCollections.observableArrayList(lcb);   
+    }
+    
+    private List<Chuyenbay> getChuyenbayByDepart(String kw) throws SQLException {
+        Connection conn = JdbcUtils.getConn();
+        PreparedStatement stm = conn.prepareStatement("SELECT * FROM sanbay WHERE sanbay like concat ('%', ? ,'%')");
+        stm.setString(1, kw);
+        ResultSet rs = stm.executeQuery();
+        List<Chuyenbay> lcb = new ArrayList<>();
+        
+        while(rs.next()) {
+            Statement stm1 = conn.createStatement();
+            ResultSet rs1 = stm1.executeQuery("SELECT * FROM chuyenbay WHERE depart_id = " + rs.getString("id_sanbay"));
+            while (rs1.next()) {
+                Chuyenbay cb = new Chuyenbay();
+                cb.setMa(rs1.getString("ma"));
+                Statement stm2 = conn.createStatement();
+                ResultSet rs2 = stm2.executeQuery("SELECT * FROM sanbay WHERE id_sanbay = " + rs1.getString("arrive_id"));
+                while(rs2.next()) {
+                    cb.setArrive(rs2.getString("sanbay"));
+                }
+                cb.setDepart(rs.getString("sanbay"));
+                cb.setDaytime(rs1.getString("daytime"));
+                cb.setTimeflight(rs1.getString("timeflight"));
+                lcb.add(cb);
+            }
+            stm1.close();
+        }
+        
+        stm.close();
+        conn.close();
+        
+        return FXCollections.observableArrayList(lcb);   
     }
     
     private void loadChuyenbay() throws SQLException {
@@ -131,19 +170,43 @@ public class PrimaryController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+    
         try {
             this.loadChuyenbay();
         } catch (SQLException ex) {
             Logger.getLogger(PrimaryController.class.getName()).log(Level.SEVERE, null, ex);
         }
         
+        
         this.txtArrive.textProperty().addListener(et -> {
-            this.tbCb.getItems().clear();
             try {
+                this.tbCb.getItems().clear();
                 this.tbCb.setItems((ObservableList<Chuyenbay>) getChuyenbayByArrive(this.txtArrive.getText()));
             } catch (SQLException ex) {
                 Logger.getLogger(PrimaryController.class.getName()).log(Level.SEVERE, null, ex);
             }
+                
+        });
+        
+        this.txtDepart.textProperty().addListener(et -> {
+            try {
+                this.tbCb.getItems().clear();
+                this.tbCb.setItems((ObservableList<Chuyenbay>) getChuyenbayByDepart(this.txtDepart.getText()));
+            } catch (SQLException ex) {
+                Logger.getLogger(PrimaryController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+                
         });
     }
 }
+        
+        
+    
+            
+        
+                
+         
+        
+        
+    
+
