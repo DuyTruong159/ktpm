@@ -22,12 +22,17 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 
 /**
  * FXML Controller class
@@ -36,17 +41,26 @@ import javafx.scene.control.TextField;
  */
 public class RegisterController implements Initializable {
 
-    @FXML ComboBox<Nganhang> cbBank;
-    @FXML TextField txtusername;
-    @FXML TextField txtcmnd;
-    @FXML TextField txtstk;
-    @FXML PasswordField txtpassword;
-    @FXML PasswordField txtconfirmpw;
-    @FXML Label lbmess;
+    @FXML private ComboBox<Nganhang> cbBank;
+    @FXML private TextField txtusername;
+    @FXML private TextField txtcmnd;
+    @FXML private TextField txtstk;
+    @FXML private PasswordField txtpassword;
+    @FXML private PasswordField txtconfirmpw;
+    @FXML private Label lbmess;
+    @FXML private Button btClose;
+    @FXML private Button btAccess;
     
     @FXML private void btBack (ActionEvent Event) {
         try {
-            App.setRoot("Login");
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("Login.fxml"));
+            Parent root = (Parent) loader.load();
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.show();
+            
+            Stage stage1 = (Stage) this.btClose.getScene().getWindow();
+            stage1.close();
         } catch (IOException ex) {
             Logger.getLogger(RegisterController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -72,7 +86,17 @@ public class RegisterController implements Initializable {
                 alert.setContentText("Welcome " + this.txtusername.getText());
                 alert.showAndWait();
                 try {
-                    App.setRoot("primary");
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("primary.fxml"));
+                    Parent root = (Parent) loader.load();
+                    
+                    PrimaryController controller = loader.getController();
+                    controller.getName(this.txtusername.getText()); 
+                    Stage stage = new Stage();
+                    stage.setScene(new Scene(root));
+                    stage.show(); 
+                    
+                    Stage stage1 = (Stage) this.btAccess.getScene().getWindow();
+                    stage1.close();
                 } catch (IOException ex) {
                     Logger.getLogger(RegisterController.class.getName()).log(Level.SEVERE, null, ex);
                 }

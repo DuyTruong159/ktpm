@@ -27,6 +27,10 @@ public class Nganhang {
     public int getId_nganhang() {
         return id_nganhang;
     }
+    
+    public String toString() {
+        return this.ten = ten;
+    }
 
     /**
      * @param id_nganhang the id_nganhang to set

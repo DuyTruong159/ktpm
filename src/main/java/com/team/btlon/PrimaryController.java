@@ -18,23 +18,45 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Stage;
 
 public class PrimaryController implements Initializable {
      
     @FXML private TextField txtArrive;
     @FXML private TextField txtDepart;
     @FXML private TableView<Chuyenbay> tbCb;
+    @FXML private Label lbname;
+    @FXML private Button btClose;
     
-    @FXML private void btSearch (ActionEvent event) {
-        
-        
+    @FXML private void btLout (ActionEvent Event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("Login.fxml"));
+            Parent root = (Parent) loader.load();
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.show();
+            
+            Stage stage1 = (Stage) this.btClose.getScene().getWindow();
+            stage1.close();
+        } catch (IOException ex) {
+            Logger.getLogger(PrimaryController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }   
+    
+    
+    public void getName(String text) {
+        this.lbname.setText("Welcome " + text);
     }
     
     private List<Chuyenbay> getChuyenbays() throws SQLException {
@@ -156,7 +178,6 @@ public class PrimaryController implements Initializable {
                 } catch (IOException ex) {
                     Logger.getLogger(PrimaryController.class.getName()).log(Level.SEVERE, null, ex);
                 }
-            
             });
             TableCell cell = new TableCell();
             cell.setGraphic(bt);
@@ -193,8 +214,7 @@ public class PrimaryController implements Initializable {
                 this.tbCb.setItems((ObservableList<Chuyenbay>) getChuyenbayByDepart(this.txtDepart.getText()));
             } catch (SQLException ex) {
                 Logger.getLogger(PrimaryController.class.getName()).log(Level.SEVERE, null, ex);
-            }
-                
+            }  
         });
     }
 }
