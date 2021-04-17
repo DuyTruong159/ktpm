@@ -15,13 +15,15 @@ public class Chuyenbay {
     private String depart;
     private String daytime;
     private String timeflight;
+    private String id_chuyenbay;
     
-    public Chuyenbay(String ma, String arrive, String depart, String daytime, String timeflight) {
+    public Chuyenbay(String id, String ma, String arrive, String depart, String daytime, String timeflight) {
         this.ma = ma;
         this.arrive = arrive;
         this.depart = depart;
         this.daytime = daytime;
         this.timeflight = timeflight;
+        this.id_chuyenbay = id;
     }
 
     public Chuyenbay() {
@@ -96,5 +98,19 @@ public class Chuyenbay {
      */
     public void setTimeflight(String timeflight) {
         this.timeflight = timeflight;
+    }
+
+    /**
+     * @return the id_chuyenbay
+     */
+    public String getId_chuyenbay() {
+        return id_chuyenbay;
+    }
+
+    /**
+     * @param id_chuyenbay the id_chuyenbay to set
+     */
+    public void setId_chuyenbay(String id_chuyenbay) {
+        this.id_chuyenbay = id_chuyenbay;
     }
 }

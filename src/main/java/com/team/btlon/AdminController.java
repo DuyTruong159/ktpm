@@ -19,7 +19,6 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -30,9 +29,11 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -143,20 +144,37 @@ public class AdminController implements Initializable {
     
     @FXML private void btAdd (ActionEvent Event) throws SQLException {
         Connection conn = JdbcUtils.getConn();
-        PreparedStatement sta = conn.prepareStatement("INSERT INTO chuyenbay (ma, arrive_id, depart_id, daytime, timeflight) VALUES "
+        if(this.txtMa.getText() == "" || this.txtDepart.getText() == "" || 
+                this.txtArrive.getText() == "" || this.txtDaytime.getText() == "" 
+                || this.txtTimeflight.getText() == "") {
+            
+            this.lbmess.setText("Information Empty!!");
+            this.txtMa.setStyle("-fx-border-color: red;");
+            this.txtArrive.setStyle("-fx-border-color: red;");
+            this.txtDepart.setStyle("-fx-border-color: red;");
+            this.txtDaytime.setStyle("-fx-border-color: red;");
+            this.txtTimeflight.setStyle("-fx-border-color: red;");
+            
+        } else {
+            PreparedStatement sta = conn.prepareStatement("INSERT INTO chuyenbay (ma, arrive_id, depart_id, daytime, timeflight) VALUES "
                 + "('" + this.txtMa.getText() + "', " + this.addArrive() + ", " + this.addDepart() 
                 + ", '" + this.txtDaytime.getText() + "', '" + this.txtTimeflight.getText() + "')");
-        sta.executeUpdate();
-        
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setContentText("New chuyenbay has added!!");
-        alert.setHeaderText(null);
-        alert.showAndWait();
-      
-        this.tbCb.getItems().clear();
-        this.tbCb.setItems((ObservableList<Chuyenbay>) getChuyenbays());
-        
+            sta.executeUpdate();
+
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setContentText("New chuyenbay has added!!");
+            alert.setHeaderText(null);
+            alert.showAndWait();
+
+            this.tbCb.getItems().clear();
+            this.tbCb.setItems((ObservableList<Chuyenbay>) getChuyenbays());
+        }
+    
         conn.close();
+    }
+    
+    @FXML private void btUdate (ActionEvent Event) {
+
     }
     
     private List<Chuyenbay> getChuyenbays() throws SQLException {
@@ -189,7 +207,20 @@ public class AdminController implements Initializable {
         return FXCollections.observableArrayList(lcb);
     }
     
+    private void deleteChuyenbay(String id) throws SQLException {
+        Connection conn = JdbcUtils.getConn();
+        conn.setAutoCommit(false);
+        Statement ps = conn.createStatement();
+        ps.executeUpdate("DELETE FROM chuyenbay WHERE id_chuyenbay = " + id);
+        
+        conn.commit();
+    }
+    
     private void loadChuyenbay() throws SQLException {
+        
+        TableColumn colId = new TableColumn("Id"); 
+        colId.setCellValueFactory(new PropertyValueFactory("id_chuyenbay"));
+        
         TableColumn colMa = new TableColumn("Ma"); 
         colMa.setCellValueFactory(new PropertyValueFactory("ma"));
         
@@ -207,17 +238,33 @@ public class AdminController implements Initializable {
         
         TableColumn colDelete = new TableColumn("Delete");
         colDelete.setCellFactory(p -> {
-            Button bt = new Button("Delete");
-            bt.setOnAction(et -> {
-                
-            
+            Button btDelete = new Button("Delete");
+            btDelete.setOnAction(et -> {
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setContentText("Are you sure to delete this chuyenbay ??");
+                alert.showAndWait().ifPresent(res -> {
+                    if(res == ButtonType.OK) {
+                        TableCell cl = (TableCell) ((Button)et.getSource()).getParent();
+                        Chuyenbay cb = (Chuyenbay)cl.getTableRow().getItem();
+                        try {
+                            this.deleteChuyenbay(cb.getId_chuyenbay());
+                            this.lbmess.setText("Sao nó ko xóa, coi clip sửa dùm t bay");
+                            
+                            this.tbCb.getItems().clear();
+                            this.tbCb.setItems((ObservableList<Chuyenbay>) getChuyenbays());
+                            
+                        } catch (SQLException ex) {
+                            Logger.getLogger(AdminController.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                });
             });
+            
             TableCell cell = new TableCell();
-            cell.setGraphic(bt);
+            cell.setGraphic(btDelete);
             return cell;
         });
-                
-          
+        
         this.tbCb.setItems((ObservableList<Chuyenbay>) getChuyenbays());
         this.tbCb.getColumns().addAll(colMa, colArrive, colDepart,  colDayTime, colTimeFlight, colDelete); 
     }
@@ -229,6 +276,22 @@ public class AdminController implements Initializable {
         } catch (SQLException ex) {
             Logger.getLogger(PrimaryController.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        this.btUpdate.setVisible(false);
+        
+        this.tbCb.setRowFactory(et -> {
+            TableRow row = new TableRow();
+            row.setOnMouseClicked(t -> {
+                this.btUpdate.setVisible(true);
+                Chuyenbay q = this.tbCb.getSelectionModel().getSelectedItem();
+                this.txtMa.setText(q.getMa());
+                this.txtArrive.setText(q.getArrive());
+                this.txtDepart.setText(q.getDepart());
+                this.txtDaytime.setText(q.getDaytime());
+                this.txtTimeflight.setText(q.getTimeflight());
+            });
+            return row;
+        });
     }    
     
 }
