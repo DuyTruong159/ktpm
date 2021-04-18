@@ -173,8 +173,25 @@ public class AdminController implements Initializable {
         conn.close();
     }
     
-    @FXML private void btUdate (ActionEvent Event) {
+    @FXML private void btUdate (ActionEvent Event) throws SQLException {
+        Connection conn = JdbcUtils.getConn();
+        try {
+            Chuyenbay cb = this.tbCb.getSelectionModel().getSelectedItem();
+            Statement stu = conn.createStatement();
+            stu.executeUpdate("UPDATE chuyenbay SET arrive_id = " + this.addArrive() + ", depart_id = " + this.addDepart() +
+                                ", daytime = '" + this.txtDaytime.getText() + "', timeflight = '" + this.txtTimeflight.getText() + 
+                                "' WHERE ma = '" + cb.getMa() + "'");
 
+            this.tbCb.getItems().clear();
+            this.tbCb.setItems((ObservableList<Chuyenbay>) getChuyenbays());
+
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setHeaderText(null);
+            alert.setContentText("Update !!!");
+            alert.showAndWait();
+        } catch (SQLException ex) {
+            Logger.getLogger(AdminController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     private List<Chuyenbay> getChuyenbays() throws SQLException {
@@ -207,19 +224,16 @@ public class AdminController implements Initializable {
         return FXCollections.observableArrayList(lcb);
     }
     
-    private void deleteChuyenbay(String id) throws SQLException {
+    private void deleteChuyenbay(String ma) throws SQLException {
         Connection conn = JdbcUtils.getConn();
         conn.setAutoCommit(false);
         Statement ps = conn.createStatement();
-        ps.executeUpdate("DELETE FROM chuyenbay WHERE id_chuyenbay = " + id);
+        ps.executeUpdate("DELETE FROM chuyenbay WHERE ma = '" + ma + "'");
         
         conn.commit();
     }
     
     private void loadChuyenbay() throws SQLException {
-        
-        TableColumn colId = new TableColumn("Id"); 
-        colId.setCellValueFactory(new PropertyValueFactory("id_chuyenbay"));
         
         TableColumn colMa = new TableColumn("Ma"); 
         colMa.setCellValueFactory(new PropertyValueFactory("ma"));
@@ -247,8 +261,7 @@ public class AdminController implements Initializable {
                         TableCell cl = (TableCell) ((Button)et.getSource()).getParent();
                         Chuyenbay cb = (Chuyenbay)cl.getTableRow().getItem();
                         try {
-                            this.deleteChuyenbay(cb.getId_chuyenbay());
-                            this.lbmess.setText("Sao nó ko xóa, coi clip sửa dùm t bay");
+                            this.deleteChuyenbay(cb.getMa());
                             
                             this.tbCb.getItems().clear();
                             this.tbCb.setItems((ObservableList<Chuyenbay>) getChuyenbays());
