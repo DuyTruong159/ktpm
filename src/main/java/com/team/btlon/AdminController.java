@@ -55,6 +55,7 @@ public class AdminController implements Initializable {
     @FXML private TextField txtTimeflight;
     @FXML private Label lbmess;
     @FXML private Button btUpdate;
+    @FXML private Button btADatve;
     
     @FXML private void btLogout (ActionEvent Event) {
         try {
@@ -66,6 +67,27 @@ public class AdminController implements Initializable {
             
             Stage stage1 = (Stage) this.btClose.getScene().getWindow();
             stage1.close();
+        } catch (IOException ex) {
+            Logger.getLogger(AdminController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    @FXML private void btDatve (ActionEvent Event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("primary.fxml"));
+            Parent root = (Parent) loader.load();
+            
+            PrimaryController prc = loader.getController();
+            prc.getName("Admin");
+            prc.Back();
+            
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.show(); 
+
+            Stage stage1 = (Stage) this.btADatve.getScene().getWindow();
+            stage1.close();
+            
         } catch (IOException ex) {
             Logger.getLogger(AdminController.class.getName()).log(Level.SEVERE, null, ex);
         }

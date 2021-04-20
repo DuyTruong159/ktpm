@@ -38,6 +38,7 @@ public class PrimaryController implements Initializable {
     @FXML private TableView<Chuyenbay> tbCb;
     @FXML private Label lbname;
     @FXML private Button btClose;
+    @FXML private Button btBack;
     
     @FXML private void btLout (ActionEvent Event) {
         try {
@@ -52,7 +53,27 @@ public class PrimaryController implements Initializable {
         } catch (IOException ex) {
             Logger.getLogger(PrimaryController.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }   
+    } 
+    
+    @FXML private void btABack (ActionEvent Event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("Admin.fxml"));
+            Parent root = (Parent) loader.load();
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.show();
+            
+            Stage stage1 = (Stage) this.btBack.getScene().getWindow();
+            stage1.close();
+        } catch (IOException ex) {
+            Logger.getLogger(PrimaryController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public void Back() {
+        this.btClose.setVisible(false);
+        this.btBack.setVisible(true);
+    }
     
     
     public void getName(String text) {
@@ -174,10 +195,26 @@ public class PrimaryController implements Initializable {
             Button bt = new Button("Dat ve");
             bt.setOnAction(et -> {
                 try {
-                    App.setRoot("secondary");
+                    TableCell cl = (TableCell) ((Button)et.getSource()).getParent();
+                    Chuyenbay cb = (Chuyenbay)cl.getTableRow().getItem();
+                    
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("secondary.fxml"));
+                    Parent root = (Parent) loader.load();
+                    
+                    SecondaryController scl = loader.getController();
+                    scl.show(cb.getMa(), cb.getArrive(), cb.getDepart(), cb.getDaytime(), cb.getTimeflight());
+                    
+                    Stage stage = new Stage();
+                    stage.setScene(new Scene(root));
+                    stage.show();
+            
+                    Stage stage1 = (Stage) bt.getScene().getWindow();
+                    stage1.close();
+                    
                 } catch (IOException ex) {
                     Logger.getLogger(PrimaryController.class.getName()).log(Level.SEVERE, null, ex);
                 }
+                
             });
             TableCell cell = new TableCell();
             cell.setGraphic(bt);
@@ -216,6 +253,8 @@ public class PrimaryController implements Initializable {
                 Logger.getLogger(PrimaryController.class.getName()).log(Level.SEVERE, null, ex);
             }  
         });
+        
+        this.btBack.setVisible(false);
     }
 }
         
