@@ -1,34 +1,49 @@
 package com.team.btlon;
 
+import com.team.pojo.Nganhang;
 import com.team.service.JdbcUtils;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
-import javafx.scene.control.Toggle;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
+import javafx.stage.Window;
+import javafx.stage.WindowEvent;
 
-public class SecondaryController implements Initializable{
+public class SecondaryController implements Initializable {
     
     @FXML private Button btPBack;
     @FXML private Label lbmess;
@@ -41,17 +56,145 @@ public class SecondaryController implements Initializable{
     @FXML private RadioButton rdSecondclass;
     @FXML private Label lbPrice;
     @FXML private TextField txtStk;
-    @FXML private ComboBox cbBank;
+    @FXML private ComboBox<Nganhang> cbBank;
+    @FXML private Button btDatve;
+    String u;
+    String pass;
+    int i = 0;
     
-    @FXML private void btBack() throws IOException {
-       FXMLLoader loader = new FXMLLoader(getClass().getResource("primary.fxml"));
-       Parent root = (Parent) loader.load();
-       Stage stage = new Stage();
-       stage.setScene(new Scene(root));
-       stage.show();
+    @FXML private void btBack(ActionEvent Event) throws IOException {
+        if("admin".equals(u)) {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("primary.fxml"));
+            Parent root = (Parent) loader.load();
+            PrimaryController prc = loader.getController();
+            prc.Back();
+            prc.getName(u);
             
-       Stage stage1 = (Stage) this.btPBack.getScene().getWindow();
-       stage1.close();
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.show();
+
+            Stage stage1 = (Stage) this.btPBack.getScene().getWindow();
+            stage1.close();
+        } else {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("primary.fxml"));
+            Parent root = (Parent) loader.load();
+            PrimaryController prc = loader.getController();
+            prc.getName(u);
+
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.show();
+
+            Stage stage1 = (Stage) this.btPBack.getScene().getWindow();
+            stage1.close();
+        }
+    }
+    
+    public void getN(String name) {
+        u = name;
+    }
+    
+    @FXML private void btPuchare (ActionEvent Event) throws SQLException {
+        if (this.txtStk.getText().isBlank() || (!this.rbFirstclass.isSelected() && !this.rdSecondclass.isSelected())) {
+            this.lbmess.setText("Fill Informations !!");
+            this.txtStk.setStyle("-fx-border-color: red;");
+            this.rbFirstclass.setStyle("-fx-border-color: red;");
+            this.rdSecondclass.setStyle("-fx-border-color: red;");
+        } else {     
+            Connection conn = JdbcUtils.getConn();
+            Statement st = conn.createStatement();
+            ResultSet rs = st.executeQuery("SELECT count(1) FROM khachhang WHERE stk_id = " + this.getstk() + " AND nganhang_id = " +
+                    this.cbBank.getSelectionModel().getSelectedItem().getId_nganhang() + " AND name like '" + u + "'");
+                
+            while(rs.next()) {
+                if (rs.getInt(1) == 1) {
+                    Statement stp = conn.createStatement();
+                    ResultSet rsp = stp.executeQuery("SELECT * FROM khachhang WHERE stk_id = " + this.getstk() + " AND nganhang_id = " + 
+                            this.cbBank.getSelectionModel().getSelectedItem().getId_nganhang() + " AND name like '" + u + "'");
+                    while(rsp.next()) {
+                        TextInputDialog inp = new TextInputDialog();
+                        inp.setHeaderText("Confirm password: ");
+                        Optional<String> num = inp.showAndWait();
+                        num.ifPresent(name -> {
+                            try {
+                                if(name.equals(rsp.getString("password"))) {
+                                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                                    alert.setHeaderText(null);
+                                    alert.setContentText("You have Purchase succesful!!");
+                                    alert.showAndWait();  
+                                    if("admin".equals(u)) {
+                                        FXMLLoader loader = new FXMLLoader(getClass().getResource("primary.fxml"));
+                                        Parent root = (Parent) loader.load();
+                                        PrimaryController prc = loader.getController();
+                                        prc.Back();
+                                        prc.getName(u);
+
+                                        Stage stage = new Stage();
+                                        stage.setScene(new Scene(root));
+                                        stage.show();
+                                        
+                                        Stage stage1 = (Stage) this.btDatve.getScene().getWindow();
+                                        stage1.close();
+                                    } else {
+                                        FXMLLoader loader = new FXMLLoader(getClass().getResource("primary.fxml"));
+                                        Parent root = (Parent) loader.load();
+                                        PrimaryController prc = loader.getController();
+                                        prc.getName(u);
+
+                                        Stage stage = new Stage();
+                                        stage.setScene(new Scene(root));
+                                        stage.show();
+
+                                        Stage stage1 = (Stage) this.btDatve.getScene().getWindow();
+                                        stage1.close();
+                                    }
+                                } else {  
+                                    if (i == 2) {
+                                        Alert alert1 = new Alert(Alert.AlertType.INFORMATION);
+                                        alert1.setHeaderText(null);
+                                        alert1.setContentText("You entered incorrectly the " + i + " time. Try again");
+                                        alert1.showAndWait();
+                                        i++;
+                                    }
+                                }
+                            } catch (SQLException ex) {
+                                Logger.getLogger(SecondaryController.class.getName()).log(Level.SEVERE, null, ex);
+                            } catch (IOException ex) {
+                                Logger.getLogger(SecondaryController.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        });
+                            
+                        if (i == 3) {
+                            try {
+                                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                                alert.setHeaderText(null);
+                                alert.setContentText("You have entered over the allowed limit");
+                                alert.showAndWait();
+                                
+                                FXMLLoader loader = new FXMLLoader(getClass().getResource("Login.fxml"));
+                                Parent root = (Parent) loader.load();
+                                
+                                Stage stage = new Stage();
+                                stage.setScene(new Scene(root));
+                                stage.show();
+                                
+                                Stage stage1 = (Stage) this.btDatve.getScene().getWindow();
+                                stage1.close();
+                            } catch (IOException ex) {
+                                Logger.getLogger(SecondaryController.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        }  
+                    }
+                } else {
+                    this.lbmess.setText("Uncorrect !!!");
+                }         
+            }
+               
+            st.close();
+            conn.close();
+            
+        }
     }
     
     public void show(String ma, String arrive, String depart, String daytime, String timeflight) {
@@ -115,14 +258,14 @@ public class SecondaryController implements Initializable{
         this.rbFirstclass.setToggleGroup(chair);
         this.rdSecondclass.setToggleGroup(chair);
         
-        this.rdSecondclass.selectedProperty().addListener(cl -> {
+        this.rbFirstclass.selectedProperty().addListener(cl -> {
             try {
                 this.lbPrice.setText(this.getPrimaryclass(this.lbMa.getText()) + " VND");
             } catch (SQLException ex) {
                 Logger.getLogger(SecondaryController.class.getName()).log(Level.SEVERE, null, ex);
             } 
         });
-        this.rbFirstclass.selectedProperty().addListener(cl -> {
+        this.rdSecondclass.selectedProperty().addListener(cl -> {
             try {
                 this.lbPrice.setText(this.getSecondaryclass(this.lbMa.getText()) + " VND");
             } catch (SQLException ex) {
@@ -131,8 +274,55 @@ public class SecondaryController implements Initializable{
         });
     }
     
+    private List<Nganhang> getNganhang() throws SQLException {
+        Connection conn = JdbcUtils.getConn();
+        Statement stm = conn.createStatement();
+        ResultSet rs = stm.executeQuery("SELECT * FROM nganhang");
+        List<Nganhang> nhl = new ArrayList<>();
+        
+        while(rs.next()) {
+            Nganhang nh = new Nganhang();
+            nh.setId_nganhang(rs.getInt("id_nganhang"));
+            nh.setTen(rs.getString("ten"));
+            nhl.add(nh);
+        }
+        
+        stm.close();
+        conn.close();
+        
+        return FXCollections.observableArrayList(nhl);     
+    }
+    
+    private String getstk() throws SQLException {
+        Connection conn = JdbcUtils.getConn();
+        Statement st = conn.createStatement();
+        ResultSet rs = st.executeQuery("SELECT * FROM taikhoan WHERE stk like " + this.txtStk.getText());
+        
+        while(rs.next()) {
+            return rs.getString("id_taikhoan");
+        }
+        
+        return null;
+    }
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         this.rdButton();
+        try {
+            this.cbBank.setItems((ObservableList) this.getNganhang());
+            this.cbBank.getSelectionModel().selectFirst();
+        } catch (SQLException ex) {
+            Logger.getLogger(SecondaryController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        this.txtStk.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, 
+                String newValue) {
+                if (!newValue.matches("\\d*")) {
+                    txtStk.setText(newValue.replaceAll("[^\\d]", ""));
+                }
+            }
+        });
     }
 }

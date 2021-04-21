@@ -18,6 +18,8 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -107,7 +109,7 @@ public class RegisterController implements Initializable {
     }
     
     private int getStk() throws SQLException {
-        Connection conn = JdbcUtils.getConn();
+        Connection conn = JdbcUtils.getConn();     
         Statement lstk = conn.createStatement();
         lstk.executeUpdate("INSERT INTO taikhoan (stk) VALUES (" + this.txtstk.getText() + ")");
         
@@ -156,9 +158,19 @@ public class RegisterController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         try {
             this.cbBank.setItems((ObservableList<Nganhang>) getNganhang());
+            this.cbBank.getSelectionModel().selectFirst();
         } catch (SQLException ex) {
             Logger.getLogger(RegisterController.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        this.txtstk.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, 
+                String newValue) {
+                if (!newValue.matches("\\d*")) {
+                    txtstk.setText(newValue.replaceAll("[^\\d]", ""));
+                }
+            }
+        });
     }    
-    
 }

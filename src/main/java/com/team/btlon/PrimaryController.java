@@ -75,9 +75,8 @@ public class PrimaryController implements Initializable {
         this.btBack.setVisible(true);
     }
     
-    
     public void getName(String text) {
-        this.lbname.setText("Welcome " + text);
+        this.lbname.setText(text);
     }
     
     private List<Chuyenbay> getChuyenbays() throws SQLException {
@@ -203,6 +202,7 @@ public class PrimaryController implements Initializable {
                     
                     SecondaryController scl = loader.getController();
                     scl.show(cb.getMa(), cb.getArrive(), cb.getDepart(), cb.getDaytime(), cb.getTimeflight());
+                    scl.getN(this.lbname.getText());
                     
                     Stage stage = new Stage();
                     stage.setScene(new Scene(root));

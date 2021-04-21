@@ -87,6 +87,7 @@ public class LoginController implements Initializable {
 
                         PrimaryController controller = loader.getController();
                         controller.getName(this.txtusername.getText()); 
+                        
                         Stage stage = new Stage();
                         stage.setScene(new Scene(root));
                         stage.show(); 

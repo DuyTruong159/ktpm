@@ -72,13 +72,13 @@ public class AdminController implements Initializable {
         }
     }
     
-    @FXML private void btDatve (ActionEvent Event) {
+    @FXML public void btDatve (ActionEvent Event) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("primary.fxml"));
             Parent root = (Parent) loader.load();
             
             PrimaryController prc = loader.getController();
-            prc.getName("Admin");
+            prc.getName("admin");
             prc.Back();
             
             Stage stage = new Stage();
