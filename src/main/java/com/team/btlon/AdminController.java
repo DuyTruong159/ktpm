@@ -224,6 +224,7 @@ public class AdminController implements Initializable {
         
         while(rs.next()) {
             Chuyenbay cb = new Chuyenbay();
+            cb.setId_chuyenbay(rs.getString("id_chuyenbay"));
             cb.setMa(rs.getString("ma"));
             Statement stm1 = conn.createStatement();
             ResultSet rs1 = stm1.executeQuery("SELECT * FROM sanbay WHERE id_sanbay = " + rs.getString("arrive_id"));
@@ -246,11 +247,14 @@ public class AdminController implements Initializable {
         return FXCollections.observableArrayList(lcb);
     }
     
-    private void deleteChuyenbay(String ma) throws SQLException {
+    private void deleteChuyenbay(String id) throws SQLException {
         Connection conn = JdbcUtils.getConn();
         conn.setAutoCommit(false);
         Statement ps = conn.createStatement();
-        ps.executeUpdate("DELETE FROM chuyenbay WHERE ma = '" + ma + "'");
+        ps.executeUpdate("DELETE FROM ghe WHERE chuyenbay_id = " + id);
+        
+        Statement psg = conn.createStatement();
+        psg.executeUpdate("DELETE FROM chuyenbay WHERE id_chuyenbay = " + id);
         
         conn.commit();
     }
@@ -283,7 +287,7 @@ public class AdminController implements Initializable {
                         TableCell cl = (TableCell) ((Button)et.getSource()).getParent();
                         Chuyenbay cb = (Chuyenbay)cl.getTableRow().getItem();
                         try {
-                            this.deleteChuyenbay(cb.getMa());
+                            this.deleteChuyenbay(cb.getId_chuyenbay());
                             
                             this.tbCb.getItems().clear();
                             this.tbCb.setItems((ObservableList<Chuyenbay>) getChuyenbays());

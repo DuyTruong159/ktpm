@@ -17,9 +17,11 @@ import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -39,6 +41,8 @@ public class PrimaryController implements Initializable {
     @FXML private Label lbname;
     @FXML private Button btClose;
     @FXML private Button btBack;
+    @FXML private Button btCb;
+    String p;
     
     @FXML private void btLout (ActionEvent Event) {
         try {
@@ -77,6 +81,10 @@ public class PrimaryController implements Initializable {
     
     public void getName(String text) {
         this.lbname.setText(text);
+    }
+    
+    public void getPass(String pass) {
+        this.p = pass;
     }
     
     private List<Chuyenbay> getChuyenbays() throws SQLException {
@@ -233,7 +241,6 @@ public class PrimaryController implements Initializable {
         } catch (SQLException ex) {
             Logger.getLogger(PrimaryController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
         
         this.txtArrive.textProperty().addListener(et -> {
             try {

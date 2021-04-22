@@ -60,7 +60,7 @@ public class SecondaryController implements Initializable {
     @FXML private Button btDatve;
     String u;
     String pass;
-    int i = 0;
+    int i = 1;
     
     @FXML private void btBack(ActionEvent Event) throws IOException {
         if("admin".equals(u)) {
@@ -119,6 +119,7 @@ public class SecondaryController implements Initializable {
                         num.ifPresent(name -> {
                             try {
                                 if(name.equals(rsp.getString("password"))) {
+                                    this.getDatve(rsp.getString("id_khachhang"));
                                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
                                     alert.setHeaderText(null);
                                     alert.setContentText("You have Purchase succesful!!");
@@ -150,7 +151,7 @@ public class SecondaryController implements Initializable {
                                         stage1.close();
                                     }
                                 } else {  
-                                    if (i == 2) {
+                                    if (i <= 3) {
                                         Alert alert1 = new Alert(Alert.AlertType.INFORMATION);
                                         alert1.setHeaderText(null);
                                         alert1.setContentText("You entered incorrectly the " + i + " time. Try again");
@@ -165,7 +166,7 @@ public class SecondaryController implements Initializable {
                             }
                         });
                             
-                        if (i == 3) {
+                        if (i == 4) {
                             try {
                                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                                 alert.setHeaderText(null);
@@ -303,6 +304,61 @@ public class SecondaryController implements Initializable {
         }
         
         return null;
+    }
+    
+    private void getDatve(String khid) throws SQLException {
+        Connection conn = JdbcUtils.getConn();
+        Statement stcb = conn.createStatement();
+        ResultSet rscb = stcb.executeQuery("SELECT * FROM chuyenbay WHERE ma like '" + this.lbMa.getText() + 
+                "' AND daytime like '" + this.lbDaytime.getText() + "' AND timeflight like '" + this.lbTimeflight.getText() + "'");
+        
+        String idcb = null;
+        while(rscb.next()) {
+            idcb = rscb.getString("id_chuyenbay");
+        }
+        stcb.close();
+        
+        String idg = null;
+        if(this.rbFirstclass.isSelected()) {
+            Statement stg = conn.createStatement();
+            ResultSet rsg = stg.executeQuery("SELECT * FROM ghe WHERE chuyenbay_id = " + idcb + " AND loai = 1");
+
+            while(rsg.next()) {
+                idg = rsg.getString("id_ghe");
+                Statement stk = conn.createStatement();
+                ResultSet rstk = stk.executeQuery("SELECT * FROM taikhoan WHERE stk like '" + this.txtStk.getText() + "'");
+
+                while(rstk.next()) {
+                    int mn = Integer.parseInt(rstk.getString("money")) - Integer.parseInt(rsg.getString("gia"));
+                    Statement stup = conn.createStatement();
+                    stup.executeUpdate("INSERT INTO taikhoan (money) VALUES (" + mn + ")");
+                }
+                stk.close();
+            }
+            stg.close();
+        } else {
+            Statement stg = conn.createStatement();
+            ResultSet rsg = stg.executeQuery("SELECT * FROM ghe WHERE chuyenbay_id = " + idcb + " AND loai = 2");
+
+            while(rsg.next()) {
+                idg = rsg.getString("id_ghe");
+                Statement stk = conn.createStatement();
+                ResultSet rstk = stk.executeQuery("SELECT * FROM taikhoan WHERE stk like '" + this.txtStk.getText() + "'");
+
+                while(rstk.next()) {
+                    int mn = Integer.parseInt(rstk.getString("money")) - Integer.parseInt(rsg.getString("gia"));
+                    Statement stup = conn.createStatement();
+                    stup.executeUpdate("UPDATE taikhoan SET money = " + mn + " WHERE id_taikhoan = " + this.getstk());
+                }
+                stk.close();
+            }
+            stg.close();
+        }
+        
+        Statement dv = conn.createStatement();
+        dv.executeUpdate("INSERT INTO vechuyenbay (chuyenbay_id, khachhang_id, ghe_id) VALUES (" + idcb + ", " + khid + ", " + idg + ")");
+        
+        conn.close();
     }
     
     @Override
