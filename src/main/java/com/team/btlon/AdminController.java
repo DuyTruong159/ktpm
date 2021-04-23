@@ -56,6 +56,7 @@ public class AdminController implements Initializable {
     @FXML private Label lbmess;
     @FXML private Button btUpdate;
     @FXML private Button btADatve;
+    String p;
     
     @FXML private void btLogout (ActionEvent Event) {
         try {
@@ -79,6 +80,7 @@ public class AdminController implements Initializable {
             
             PrimaryController prc = loader.getController();
             prc.getName("admin");
+            prc.getPass(p);
             prc.Back();
             
             Stage stage = new Stage();
@@ -91,6 +93,10 @@ public class AdminController implements Initializable {
         } catch (IOException ex) {
             Logger.getLogger(AdminController.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    public void getP(String text) {
+        this.p = text;
     }
     
     private int addArrive() throws SQLException {

@@ -71,6 +71,10 @@ public class LoginController implements Initializable {
                     try {
                         FXMLLoader loader = new FXMLLoader(getClass().getResource("Admin.fxml"));
                         Parent root = (Parent) loader.load();
+                        
+                        AdminController ac = loader.getController();
+                        ac.getP(this.txtpassword.getText());
+                        
                         Stage stage = new Stage();
                         stage.setScene(new Scene(root));
                         stage.show(); 
@@ -86,7 +90,7 @@ public class LoginController implements Initializable {
                         Parent root = (Parent) loader.load();
 
                         PrimaryController controller = loader.getController();
-                        controller.getName(this.txtusername.getText()); 
+                        controller.getName(this.txtusername.getText());
                         controller.getPass(this.txtpassword.getText());
                         
                         Stage stage = new Stage();

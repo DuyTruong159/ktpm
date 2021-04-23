@@ -17,11 +17,9 @@ import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -41,8 +39,33 @@ public class PrimaryController implements Initializable {
     @FXML private Label lbname;
     @FXML private Button btClose;
     @FXML private Button btBack;
-    @FXML private Button btCb;
-    String p;
+    @FXML private Button btXemcb;
+    @FXML private Label p;
+    
+    @FXML private void btXem (ActionEvent Event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("xem.fxml"));
+            Parent root = (Parent) loader.load();
+            XemController xc = loader.getController();
+            xc.getN(this.lbname.getText());
+            xc.getP(this.p.getText());
+            try {
+                xc.getsodu(this.lbname.getText(), this.p.getText());
+                xc.getcbdadat(this.lbname.getText(), this.p.getText());
+            } catch (SQLException ex) {
+                Logger.getLogger(PrimaryController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.show();
+            
+            Stage stage1 = (Stage) this.btXemcb.getScene().getWindow();
+            stage1.close();
+        } catch (IOException ex) {
+            Logger.getLogger(PrimaryController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
     
     @FXML private void btLout (ActionEvent Event) {
         try {
@@ -84,7 +107,7 @@ public class PrimaryController implements Initializable {
     }
     
     public void getPass(String pass) {
-        this.p = pass;
+        this.p.setText(pass);
     }
     
     private List<Chuyenbay> getChuyenbays() throws SQLException {
