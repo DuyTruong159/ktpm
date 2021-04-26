@@ -29,6 +29,10 @@ public class Chuyenbay {
     public Chuyenbay() {
     
     }
+    
+    public String toString() {
+        return this.ma = ma;
+    }
 
     /**
      * @return the ma

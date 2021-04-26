@@ -166,6 +166,11 @@
             <Font name="Arial" size="36.0" />
          </font>
       </Label>
+      <Label fx:id="test" text="Label" GridPane.columnIndex="2" GridPane.rowIndex="6">
+         <font>
+            <Font name="Arial" size="13.0" />
+         </font>
+      </Label>
    </children>
    <opaqueInsets>
       <Insets />

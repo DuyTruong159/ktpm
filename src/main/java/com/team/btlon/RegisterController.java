@@ -75,7 +75,7 @@ public class RegisterController implements Initializable {
             this.txtusername.setStyle("-fx-border-color: red;");
             this.txtstk.setStyle("-fx-border-color: red;");
             this.txtpassword.setStyle("-fx-border-color: red;");
-            this.cbBank.setStyle("-fx-border-color: red;");
+            this.cbBank.setStyle("-fx-border-color: red; -fx-font-family: Arial");
         } else if (!this.txtconfirmpw.getText().equals(this.txtpassword.getText())) {
             this.lbmess.setText("Incorect password confirm!!");
             this.txtpassword.setStyle("-fx-border-color: red;");

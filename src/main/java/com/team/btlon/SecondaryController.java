@@ -58,8 +58,8 @@ public class SecondaryController implements Initializable {
     @FXML private TextField txtStk;
     @FXML private ComboBox<Nganhang> cbBank;
     @FXML private Button btDatve;
+    @FXML private Label test;
     String u;
-    String pass;
     int i = 1;
     
     @FXML private void btBack(ActionEvent Event) throws IOException {
@@ -69,6 +69,7 @@ public class SecondaryController implements Initializable {
             PrimaryController prc = loader.getController();
             prc.Back();
             prc.getName(u);
+            prc.getPass(this.test.getText());
             
             Stage stage = new Stage();
             stage.setScene(new Scene(root));
@@ -81,6 +82,7 @@ public class SecondaryController implements Initializable {
             Parent root = (Parent) loader.load();
             PrimaryController prc = loader.getController();
             prc.getName(u);
+            prc.getPass(this.test.getText());
 
             Stage stage = new Stage();
             stage.setScene(new Scene(root));
@@ -93,6 +95,10 @@ public class SecondaryController implements Initializable {
     
     public void getN(String name) {
         u = name;
+    }
+    
+    public void getP(String test) {
+        this.test.setText(test);
     }
     
     @FXML private void btPuchare (ActionEvent Event) throws SQLException {
@@ -122,7 +128,7 @@ public class SecondaryController implements Initializable {
                                     this.getDatve(rsp.getString("id_khachhang"));
                                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
                                     alert.setHeaderText(null);
-                                    alert.setContentText("You have Purchase succesful!!");
+                                    alert.setContentText("You have Purchase succesfull!!");
                                     alert.showAndWait();  
                                     if("admin".equals(u)) {
                                         FXMLLoader loader = new FXMLLoader(getClass().getResource("primary.fxml"));
@@ -130,6 +136,7 @@ public class SecondaryController implements Initializable {
                                         PrimaryController prc = loader.getController();
                                         prc.Back();
                                         prc.getName(u);
+                                        prc.getPass(this.test.getText());
 
                                         Stage stage = new Stage();
                                         stage.setScene(new Scene(root));
@@ -142,6 +149,7 @@ public class SecondaryController implements Initializable {
                                         Parent root = (Parent) loader.load();
                                         PrimaryController prc = loader.getController();
                                         prc.getName(u);
+                                        prc.getPass(this.test.getText());
 
                                         Stage stage = new Stage();
                                         stage.setScene(new Scene(root));
@@ -381,4 +389,5 @@ public class SecondaryController implements Initializable {
             }
         });
     }
+    
 }

@@ -13,15 +13,21 @@ public class Vechuyenbay {
     private String chuyenbay_id;
     private String khachhang_id;
     private String ghe_id;
+    private String cb_id;
     
-    public Vechuyenbay(String chuyenbay_id, String khachhang_id, String ghe_id) {
+    public Vechuyenbay(String chuyenbay_id, String khachhang_id, String ghe_id, String cb_id) {
         this.chuyenbay_id = chuyenbay_id;
         this.khachhang_id = khachhang_id;
         this.ghe_id = ghe_id;
+        this.cb_id = cb_id;
     }
     
     public Vechuyenbay() {
     
+    }
+    
+    public String toString() {
+        return this.chuyenbay_id = chuyenbay_id;
     }
 
     /**
@@ -64,5 +70,19 @@ public class Vechuyenbay {
      */
     public void setGhe_id(String ghe_id) {
         this.ghe_id = ghe_id;
+    }
+
+    /**
+     * @return the cb_id
+     */
+    public String getCb_id() {
+        return cb_id;
+    }
+
+    /**
+     * @param cb_id the cb_id to set
+     */
+    public void setCb_id(String cb_id) {
+        this.cb_id = cb_id;
     }
 }

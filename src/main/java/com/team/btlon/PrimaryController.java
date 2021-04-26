@@ -46,12 +46,12 @@ public class PrimaryController implements Initializable {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("xem.fxml"));
             Parent root = (Parent) loader.load();
+            
             XemController xc = loader.getController();
             xc.getN(this.lbname.getText());
             xc.getP(this.p.getText());
             try {
                 xc.getsodu(this.lbname.getText(), this.p.getText());
-                xc.getcbdadat(this.lbname.getText(), this.p.getText());
             } catch (SQLException ex) {
                 Logger.getLogger(PrimaryController.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -234,6 +234,7 @@ public class PrimaryController implements Initializable {
                     SecondaryController scl = loader.getController();
                     scl.show(cb.getMa(), cb.getArrive(), cb.getDepart(), cb.getDaytime(), cb.getTimeflight());
                     scl.getN(this.lbname.getText());
+                    scl.getP(this.p.getText());
                     
                     Stage stage = new Stage();
                     stage.setScene(new Scene(root));
@@ -285,6 +286,7 @@ public class PrimaryController implements Initializable {
         });
         
         this.btBack.setVisible(false);
+        
     }
 }
         
