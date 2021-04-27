@@ -5,7 +5,10 @@
  */
 package com.team.btlon;
 
+import com.team.pojo.All;
 import com.team.pojo.Chuyenbay;
+import com.team.pojo.Ghe;
+import com.team.pojo.Vechuyenbay;
 import com.team.service.JdbcUtils;
 import java.io.IOException;
 import java.net.URL;
@@ -46,7 +49,7 @@ import javafx.stage.Stage;
  */
 public class AdminController implements Initializable {
 
-    @FXML private TableView<Chuyenbay> tbCb;
+    @FXML private TableView tbCb;
     @FXML private Button btClose;
     @FXML private TextField txtMa;
     @FXML private TextField txtArrive;
@@ -56,6 +59,7 @@ public class AdminController implements Initializable {
     @FXML private Label lbmess;
     @FXML private Button btUpdate;
     @FXML private Button btADatve;
+    @FXML private Button btXem;
     String p;
     
     @FXML private void btLogout (ActionEvent Event) {
@@ -204,7 +208,7 @@ public class AdminController implements Initializable {
     @FXML private void btUdate (ActionEvent Event) throws SQLException {
         Connection conn = JdbcUtils.getConn();
         try {
-            Chuyenbay cb = this.tbCb.getSelectionModel().getSelectedItem();
+            Chuyenbay cb = (Chuyenbay) this.tbCb.getSelectionModel().getSelectedItem();
             Statement stu = conn.createStatement();
             stu.executeUpdate("UPDATE chuyenbay SET arrive_id = " + this.addArrive() + ", depart_id = " + this.addDepart() +
                                 ", daytime = '" + this.txtDaytime.getText() + "', timeflight = '" + this.txtTimeflight.getText() + 
@@ -220,6 +224,86 @@ public class AdminController implements Initializable {
         } catch (SQLException ex) {
             Logger.getLogger(AdminController.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    @FXML private void btXemve (ActionEvent Event) {
+        try {
+            if("Xem vé".equals(this.btXem.getText())) {
+                Connection conn = JdbcUtils.getConn();
+                Statement st = conn.createStatement();
+                ResultSet rs = st.executeQuery("SELECT * FROM vechuyenbay");
+                List lvcb = new ArrayList<>();
+                while(rs.next()) {
+                    All a = new All();
+                    Statement stcb = conn.createStatement();
+                    ResultSet rscb = stcb.executeQuery("SELECT * FROM chuyenbay WHERE id_chuyenbay = " + rs.getString("chuyenbay_id"));
+                    while(rscb.next()) {
+                        a.setMa(rscb.getString("ma"));
+                        Statement stm1 = conn.createStatement();
+                        ResultSet rs1 = stm1.executeQuery("SELECT * FROM sanbay WHERE id_sanbay = " + rscb.getString("arrive_id"));
+                        while (rs1.next()) {
+                            a.setArrive(rs1.getString("sanbay"));
+                        }
+                        rs1 = stm1.executeQuery("SELECT * FROM sanbay WHERE id_sanbay = " + rscb.getString("depart_id"));
+                        while (rs1.next()) {
+                            a.setDepart(rs1.getString("sanbay"));
+                        }
+                        stm1.close();
+                        a.setDaytime(rscb.getString("daytime"));
+                        a.setTimeflight(rscb.getString("timeflight"));
+                    }
+                    Statement stkh = conn.createStatement();
+                    ResultSet rskh = stkh.executeQuery("SELECT name FROM khachhang WHERE id_khachhang = " + rs.getString("khachhang_id"));
+                    while(rskh.next()) {
+                        a.setName(rskh.getString(1));
+                    }
+                    Statement stg = conn.createStatement();
+                    ResultSet rsg = stg.executeQuery("SELECT * FROM ghe WHERE id_ghe = " + rs.getString("ghe_id"));
+                    while(rsg.next()) {
+                        a.setGia(String.format("%,d", Integer.parseInt(rsg.getString("gia"))) + " VND");
+                        if("1".equals(rsg.getString("loai"))) {
+                            a.setLoai("Primary Class");
+                        } else {
+                            a.setLoai("Secondary Class");
+                        }
+                    }
+                    lvcb.add(a);
+                }
+
+                TableColumn colMa = new TableColumn("Ma");
+                colMa.setCellValueFactory(new PropertyValueFactory("ma"));
+
+                TableColumn colArrive = new TableColumn("Arrive");
+                colArrive.setCellValueFactory(new PropertyValueFactory("arrive"));
+
+                TableColumn colDepart = new TableColumn("Depart");
+                colDepart.setCellValueFactory(new PropertyValueFactory("depart"));
+
+                TableColumn colDayTime = new TableColumn("DayTime");
+                colDayTime.setCellValueFactory(new PropertyValueFactory("daytime"));
+
+                TableColumn colTimeFlight = new TableColumn("TimeFlight");
+                colTimeFlight.setCellValueFactory(new PropertyValueFactory("timeflight"));
+
+                TableColumn colName = new TableColumn("Customers's Name");
+                colName.setCellValueFactory(new PropertyValueFactory("name"));
+
+                TableColumn colLoai = new TableColumn("Classes");
+                colLoai.setCellValueFactory(new PropertyValueFactory("loai"));
+
+                TableColumn colPrice = new TableColumn("Price");
+                colPrice.setCellValueFactory(new PropertyValueFactory("gia"));
+
+                this.tbCb.getItems().clear();
+                this.tbCb.getColumns().clear();
+                this.tbCb.setItems(FXCollections.observableArrayList(lvcb));
+                this.tbCb.getColumns().addAll(colMa, colArrive, colDepart, colDayTime, colTimeFlight, colName, colLoai, colPrice);
+                
+                this.btXem.setText("Xem chuyến bay");
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(AdminController.class.getName()).log(Level.SEVERE, null, ex);
+        }      
     }
     
     private List<Chuyenbay> getChuyenbays() throws SQLException {
@@ -328,7 +412,7 @@ public class AdminController implements Initializable {
             TableRow row = new TableRow();
             row.setOnMouseClicked(t -> {
                 this.btUpdate.setVisible(true);
-                Chuyenbay q = this.tbCb.getSelectionModel().getSelectedItem();
+                Chuyenbay q = (Chuyenbay) this.tbCb.getSelectionModel().getSelectedItem();
                 this.txtMa.setText(q.getMa());
                 this.txtArrive.setText(q.getArrive());
                 this.txtDepart.setText(q.getDepart());

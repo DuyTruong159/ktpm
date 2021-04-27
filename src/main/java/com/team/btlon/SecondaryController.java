@@ -339,7 +339,7 @@ public class SecondaryController implements Initializable {
                 while(rstk.next()) {
                     int mn = Integer.parseInt(rstk.getString("money")) - Integer.parseInt(rsg.getString("gia"));
                     Statement stup = conn.createStatement();
-                    stup.executeUpdate("INSERT INTO taikhoan (money) VALUES (" + mn + ")");
+                    stup.executeUpdate("UPDATE taikhoan SET money = " + mn + " WHERE id_taikhoan = " + this.getstk());
                 }
                 stk.close();
             }

@@ -64,12 +64,12 @@
             <Font name="Arial" size="20.0" />
          </font>
       </Label>
-      <Label fx:id="p" prefHeight="16.0" prefWidth="82.0" GridPane.columnIndex="1" GridPane.rowIndex="6">
+      <Label fx:id="p" prefHeight="16.0" prefWidth="82.0" textFill="LIGHTBLUE" GridPane.columnIndex="1" GridPane.rowIndex="6">
          <font>
             <Font name="Arial" size="13.0" />
          </font>
       </Label>
-      <ComboBox fx:id="cbXem" onAction="#getThongtin" prefHeight="35.0" prefWidth="367.0" style="-fx-font-family: Arial;" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="2" />
+      <ComboBox fx:id="cbXem" onAction="#getThongtin" prefHeight="35.0" prefWidth="367.0" style="-fx-font-family: Times New RomanTimes New Roman;" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="2" />
       <Label fx:id="lbArrive" alignment="CENTER" prefHeight="27.0" prefWidth="221.0" textFill="RED" GridPane.columnIndex="1" GridPane.rowIndex="3">
          <font>
             <Font name="Arial" size="24.0" />
@@ -115,7 +115,7 @@
             <Font name="Arial" size="24.0" />
          </font>
       </Label>
-      <Button fx:id="btHuy" mnemonicParsing="false" onAction="#btXoa" prefHeight="55.0" prefWidth="97.0" text="Hủy vé" GridPane.columnIndex="2" GridPane.rowIndex="6">
+      <Button fx:id="btHuy" mnemonicParsing="false" prefHeight="55.0" prefWidth="97.0" text="Hủy vé" GridPane.columnIndex="2" GridPane.rowIndex="6">
          <font>
             <Font name="Arial" size="18.0" />
          </font>
@@ -125,9 +125,9 @@
             <Font name="Arial" size="24.0" />
          </font>
       </Label>
-      <Button mnemonicParsing="false" text="Button" GridPane.columnIndex="3" GridPane.rowIndex="6">
+      <Button fx:id="btChange" mnemonicParsing="false" onAction="#btDoi" prefHeight="59.0" prefWidth="97.0" text="Đổi vé" GridPane.columnIndex="3" GridPane.rowIndex="6">
          <font>
-            <Font name="Arial" size="13.0" />
+            <Font name="Arial" size="18.0" />
          </font>
       </Button>
       <Label alignment="CENTER" prefHeight="27.0" prefWidth="318.0" text="Price" textFill="RED" GridPane.columnIndex="2" GridPane.rowIndex="5">

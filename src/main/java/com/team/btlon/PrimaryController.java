@@ -86,6 +86,10 @@ public class PrimaryController implements Initializable {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("Admin.fxml"));
             Parent root = (Parent) loader.load();
+            
+            AdminController ac = loader.getController();
+            ac.getP(this.p.getText());
+            
             Stage stage = new Stage();
             stage.setScene(new Scene(root));
             stage.show();

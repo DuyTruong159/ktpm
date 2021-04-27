@@ -14,12 +14,17 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -55,6 +60,7 @@ public class XemController implements Initializable {
     @FXML private Label lbClass;
     @FXML private Label lbmess;
     @FXML private Button btHuy;
+    @FXML private Button btChange;
     
     @FXML private void btBack (ActionEvent Event) throws IOException {
         if ("admin".equals(this.lbName.getText())) {
@@ -86,63 +92,157 @@ public class XemController implements Initializable {
         }
     }
     
-    @FXML private void btXoa(ActionEvent Event) throws SQLException {
-        TextInputDialog inp = new TextInputDialog();
-        inp.setHeaderText("Confirm password: ");
-        Optional<String> num = inp.showAndWait();
-        num.ifPresent(name -> {
-            if(name.equals(this.p.getText())) {
-                try {
+    @FXML private void btXoa(ActionEvent Event) {
+        try {
+            Connection conn = JdbcUtils.getConn();
+            conn.setAutoCommit(false);
+            Statement stvcb = conn.createStatement();
+            stvcb.executeUpdate("DELETE FROM vechuyenbay WHERE khachhang_id = 3 AND chuyenbay_id = " + this.cbXem.getSelectionModel().getSelectedItem().getCb_id());
+            
+            TextInputDialog inp = new TextInputDialog();
+            inp.setHeaderText("Confirm password: ");
+            Optional<String> num = inp.showAndWait();
+            num.ifPresent(name -> {
+                if(name.equals(this.p.getText())) {
+                    try {
+                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                        alert.setHeaderText(null);
+                        alert.setContentText("You have Canceled succesfull!!");
+                        alert.showAndWait();
+                        
+                        FXMLLoader loader = new FXMLLoader(getClass().getResource("primary.fxml"));
+                        Parent root = (Parent) loader.load();
+                        
+                        PrimaryController prc = loader.getController();
+                        prc.getName(this.lbName.getText());
+                        prc.getPass(this.p.getText());
+                        
+                        Stage stage = new Stage();
+                        stage.setScene(new Scene(root));
+                        stage.show();
+                        
+                        Stage stage1 = (Stage) this.btChange.getScene().getWindow();
+                        stage1.close();
+                    } catch (IOException ex) {
+                        Logger.getLogger(XemController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                } else {
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.setHeaderText(null);
-                    alert.setContentText("You have Canceled succesfull!!");
+                    alert.setContentText("Wrong Password");
                     alert.showAndWait();
-                    
-                    FXMLLoader loader = new FXMLLoader(getClass().getResource("xem.fxml"));
-                    Parent root = (Parent) loader.load();
-                    
-                    XemController xc = loader.getController();
-                    xc.getN(this.lbName.getText());
-                    xc.getP(this.p.getText());
-                    try {
-                        xc.getsodu(this.lbName.getText(), this.p.getText());
-                    } catch (SQLException ex) {
-                        Logger.getLogger(PrimaryController.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                    
-                    Stage stage = new Stage();
-                    stage.setScene(new Scene(root));
-                    stage.show();
-                    
-                    Connection conn = JdbcUtils.getConn();
-                    conn.setAutoCommit(false);
-                    Statement sthk = conn.createStatement();
-                    ResultSet rshk = sthk.executeQuery("SELECT id_khachhang FROM khachhang WHERE name like 'truong' AND password like '123'");
-                    while(rshk.next()) {
-                        Statement stcb = conn.createStatement();
-                        ResultSet rscb = stcb.executeQuery("SELECT id_chuyenbay FROM chuyenbay WHERE ma like '" 
-                                + this.cbXem.getSelectionModel().getSelectedItem().getChuyenbay_id() + "'");
-                        while(rscb.next()) {
-                            Statement stvcb = conn.createStatement();
-                            stvcb.executeUpdate("DELETE FROM vechuyenbay WHERE khachhang_id = " + 
-                                rshk.getString(1) + " AND chuyenbay_id = " + rscb.getString(1));
-                        }
-                        stcb.close();
-                    }  
-                    sthk.close();
-                    conn.close();
-                } catch (SQLException ex) {
-                    Logger.getLogger(XemController.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (IOException ex) {
-                    Logger.getLogger(XemController.class.getName()).log(Level.SEVERE, null, ex);
                 }
-            } else {
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setHeaderText(null);
-                alert.setContentText("Wrong Password");
-                alert.showAndWait();
+            });
+        } catch (SQLException ex) {
+            Logger.getLogger(XemController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    @FXML private void btDoi() throws SQLException {
+        Connection conn = JdbcUtils.getConn();
+        Statement st = conn.createStatement();
+        ResultSet rs = st.executeQuery("SELECT ghe_id FROM vechuyenbay WHERE khachhang_id = 3 AND chuyenbay_id = " + this.cbXem.getSelectionModel().getSelectedItem().getCb_id());
+        while(rs.next()) {
+            Statement stg = conn.createStatement();
+            ResultSet rsg = stg.executeQuery("SELECT loai FROM ghe WHERE chuyenbay_id = " + 
+                    this.cbXem.getSelectionModel().getSelectedItem().getCb_id() + " AND id_ghe = " + rs.getString(1));
+            while (rsg.next()) {
+                if("1".equals(rsg.getString(1))) {
+                    Statement stdg = conn.createStatement();
+                    ResultSet rsdg = stdg.executeQuery("SELECT id_ghe FROM ghe WHERE chuyenbay_id = " + this.cbXem.getSelectionModel().getSelectedItem().getCb_id() + " AND loai = 2");
+                    while(rsdg.next()) {
+                        Statement stvcb = conn.createStatement();
+                        stvcb.executeUpdate("UPDATE vechuyenbay SET ghe_id = " + rsdg.getString(1));
+                    } 
+                    TextInputDialog inp = new TextInputDialog();
+                    inp.setHeaderText("Confirm password: ");
+                    Optional<String> num = inp.showAndWait();
+                    num.ifPresent(name -> {
+                        if(name.equals(this.p.getText())) {
+                            try {
+                                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                                alert.setHeaderText(null);
+                                alert.setContentText("You have Changed succesfull!!");
+                                alert.showAndWait();
+                                
+                                FXMLLoader loader = new FXMLLoader(getClass().getResource("xem.fxml"));
+                                Parent root = (Parent) loader.load();
+
+                                XemController xc = loader.getController();
+                                xc.getN(this.lbName.getText());
+                                xc.getP(this.p.getText());
+                                try {
+                                    xc.getsodu(this.lbName.getText(), this.p.getText());
+                                } catch (SQLException ex) {
+                                    Logger.getLogger(PrimaryController.class.getName()).log(Level.SEVERE, null, ex);
+                                }
+
+                                Stage stage = new Stage();
+                                stage.setScene(new Scene(root));
+                                stage.show();
+
+                                Stage stage1 = (Stage) this.btHuy.getScene().getWindow();
+                                stage1.close();
+                            } catch (IOException ex) {
+                                Logger.getLogger(XemController.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        } else {
+                            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                            alert.setHeaderText(null);
+                            alert.setContentText("Wrong Password");
+                            alert.showAndWait();
+                        }
+                    });
+                
+                } else {
+                    Statement stdg = conn.createStatement();
+                    ResultSet rsdg = stdg.executeQuery("SELECT id_ghe FROM ghe WHERE chuyenbay_id = " + this.cbXem.getSelectionModel().getSelectedItem().getCb_id() + " AND loai = 1");
+                    while(rsdg.next()) {
+                        Statement stvcb = conn.createStatement();
+                        stvcb.executeUpdate("UPDATE vechuyenbay SET ghe_id = " + rsdg.getString(1));
+                    }
+                    TextInputDialog inp = new TextInputDialog();
+                    inp.setHeaderText("Confirm password: ");
+                    Optional<String> num = inp.showAndWait();
+                    num.ifPresent(name -> {
+                        if(name.equals(this.p.getText())) {
+                            try {
+                                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                                alert.setHeaderText(null);
+                                alert.setContentText("You have Changed succesfull!!");
+                                alert.showAndWait();
+
+                                FXMLLoader loader = new FXMLLoader(getClass().getResource("xem.fxml"));
+                                Parent root = (Parent) loader.load();
+
+                                XemController xc = loader.getController();
+                                xc.getN(this.lbName.getText());
+                                xc.getP(this.p.getText());
+                                try {
+                                    xc.getsodu(this.lbName.getText(), this.p.getText());
+                                } catch (SQLException ex) {
+                                    Logger.getLogger(PrimaryController.class.getName()).log(Level.SEVERE, null, ex);
+                                }
+
+                                Stage stage = new Stage();
+                                stage.setScene(new Scene(root));
+                                stage.show();
+
+                                Stage stage1 = (Stage) this.btHuy.getScene().getWindow();
+                                stage1.close();
+                            } catch (IOException ex) {
+                                Logger.getLogger(XemController.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        } else {
+                            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                            alert.setHeaderText(null);
+                            alert.setContentText("Wrong Password");
+                            alert.showAndWait();
+                        }
+                    });
+                }              
             }
-        });
+        }
     }
     
     public void getN(String text) {
@@ -243,7 +343,6 @@ public class XemController implements Initializable {
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-      
         try {
             this.cbXem.setItems(this.getVechuyenbay());
             this.cbXem.getSelectionModel().selectFirst();
@@ -290,10 +389,12 @@ public class XemController implements Initializable {
                 st.close();
                 conn.close();     
             } else {
-                this.lbmess.setText("Khoo");
+                this.lbmess.setText("Không có chuyến bay");
             }
         } catch (SQLException ex) {
             Logger.getLogger(XemController.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }  
+        
+        
+    }
 }
