@@ -16,14 +16,18 @@ public class Chuyenbay {
     private String daytime;
     private String timeflight;
     private String id_chuyenbay;
+    private String soghe1;
+    private String soghe2;
     
-    public Chuyenbay(String id, String ma, String arrive, String depart, String daytime, String timeflight) {
+    public Chuyenbay(String id, String ma, String arrive, String depart, String daytime, String timeflight, String soghe1, String soghe2) {
         this.ma = ma;
         this.arrive = arrive;
         this.depart = depart;
         this.daytime = daytime;
         this.timeflight = timeflight;
         this.id_chuyenbay = id;
+        this.soghe1 = soghe1;
+        this.soghe2 = soghe2;
     }
 
     public Chuyenbay() {
@@ -116,5 +120,33 @@ public class Chuyenbay {
      */
     public void setId_chuyenbay(String id_chuyenbay) {
         this.id_chuyenbay = id_chuyenbay;
+    }
+
+    /**
+     * @return the soghe1
+     */
+    public String getSoghe1() {
+        return soghe1;
+    }
+
+    /**
+     * @param soghe1 the soghe1 to set
+     */
+    public void setSoghe1(String soghe1) {
+        this.soghe1 = soghe1;
+    }
+
+    /**
+     * @return the soghe2
+     */
+    public String getSoghe2() {
+        return soghe2;
+    }
+
+    /**
+     * @param soghe2 the soghe2 to set
+     */
+    public void setSoghe2(String soghe2) {
+        this.soghe2 = soghe2;
     }
 }

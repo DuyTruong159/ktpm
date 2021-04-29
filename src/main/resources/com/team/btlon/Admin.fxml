@@ -130,7 +130,12 @@
             <Insets left="80.0" />
          </GridPane.margin>
       </Button>
-      <Button fx:id="btXem" mnemonicParsing="false" onAction="#btXemve" prefHeight="50.0" prefWidth="129.0" text="Xem vé" wrapText="true" GridPane.columnIndex="5" GridPane.rowIndex="3">
+      <Button fx:id="btXem" mnemonicParsing="false" onAction="#btXemve" prefHeight="75.0" prefWidth="131.0" text="Xem vé" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="5" GridPane.rowIndex="3">
+         <font>
+            <Font name="Arial" size="24.0" />
+         </font>
+      </Button>
+      <Button fx:id="btXCb" mnemonicParsing="false" onAction="#btXemcb" prefHeight="79.0" prefWidth="174.0" text="Xem chuyến bay" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="5" GridPane.rowIndex="3">
          <font>
             <Font name="Arial" size="24.0" />
          </font>

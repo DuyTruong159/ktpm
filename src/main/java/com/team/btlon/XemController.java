@@ -94,8 +94,19 @@ public class XemController implements Initializable {
     
     @FXML private void btXoa(ActionEvent Event) {
         try {
-            Connection conn = JdbcUtils.getConn();
-            conn.setAutoCommit(false);
+            Connection conn = JdbcUtils.getConn();           
+            Statement stg  = conn.createStatement();
+            ResultSet rsg = stg.executeQuery("SELECT ghe_id FROM vechuyenbay WHERE khachhang_id = 3 AND chuyenbay_id = " + this.cbXem.getSelectionModel().getSelectedItem().getCb_id());
+            while(rsg.next()) {
+                Statement sl = conn.createStatement();
+                ResultSet rsl = sl.executeQuery("SELECT soluong FROM ghe WHERE id_ghe = " + rsg.getString(1));
+                while(rsl.next()) {
+                    int csl = Integer.parseInt(rsl.getString(1)) + 1;
+                    Statement scsl = conn.createStatement();
+                    scsl.executeUpdate("UPDATE ghe SET soluong = " + csl + " WHERE id_ghe = " + rsg.getString(1));
+                }
+            }
+            
             Statement stvcb = conn.createStatement();
             stvcb.executeUpdate("DELETE FROM vechuyenbay WHERE khachhang_id = 3 AND chuyenbay_id = " + this.cbXem.getSelectionModel().getSelectedItem().getCb_id());
             
@@ -110,18 +121,23 @@ public class XemController implements Initializable {
                         alert.setContentText("You have Canceled succesfull!!");
                         alert.showAndWait();
                         
-                        FXMLLoader loader = new FXMLLoader(getClass().getResource("primary.fxml"));
+                        FXMLLoader loader = new FXMLLoader(getClass().getResource("xem.fxml"));
                         Parent root = (Parent) loader.load();
                         
-                        PrimaryController prc = loader.getController();
-                        prc.getName(this.lbName.getText());
-                        prc.getPass(this.p.getText());
+                        XemController xc = loader.getController();
+                        xc.getN(this.lbName.getText());
+                        xc.getP(this.p.getText());
+                        try {
+                            xc.getsodu(this.lbName.getText(), this.p.getText());
+                        } catch (SQLException ex) {
+                            Logger.getLogger(PrimaryController.class.getName()).log(Level.SEVERE, null, ex);
+                        }
                         
                         Stage stage = new Stage();
                         stage.setScene(new Scene(root));
                         stage.show();
                         
-                        Stage stage1 = (Stage) this.btChange.getScene().getWindow();
+                        Stage stage1 = (Stage) this.btHuy.getScene().getWindow();
                         stage1.close();
                     } catch (IOException ex) {
                         Logger.getLogger(XemController.class.getName()).log(Level.SEVERE, null, ex);
@@ -141,19 +157,27 @@ public class XemController implements Initializable {
     @FXML private void btDoi() throws SQLException {
         Connection conn = JdbcUtils.getConn();
         Statement st = conn.createStatement();
-        ResultSet rs = st.executeQuery("SELECT ghe_id FROM vechuyenbay WHERE khachhang_id = 3 AND chuyenbay_id = " + this.cbXem.getSelectionModel().getSelectedItem().getCb_id());
-        while(rs.next()) {
+        ResultSet rs = st.executeQuery("SELECT ghe_id FROM vechuyenbay WHERE khachhang_id = 3 AND chuyenbay_id = " + this.cbXem.getSelectionModel().getSelectedItem().getCb_id()); 
+        while(rs.next()) {   
             Statement stg = conn.createStatement();
-            ResultSet rsg = stg.executeQuery("SELECT loai FROM ghe WHERE chuyenbay_id = " + 
+            ResultSet rsg = stg.executeQuery("SELECT * FROM ghe WHERE chuyenbay_id = " + 
                     this.cbXem.getSelectionModel().getSelectedItem().getCb_id() + " AND id_ghe = " + rs.getString(1));
             while (rsg.next()) {
-                if("1".equals(rsg.getString(1))) {
+                if("1".equals(rsg.getString("loai"))) {
+                    int sl1 = Integer.parseInt(rsg.getString("soluong")) + 1;
+                    Statement scsl1 = conn.createStatement();
+                    scsl1.executeUpdate("UPDATE ghe SET soluong = " + sl1 + " WHERE id_ghe = " + rsg.getString(1));
+                    
                     Statement stdg = conn.createStatement();
-                    ResultSet rsdg = stdg.executeQuery("SELECT id_ghe FROM ghe WHERE chuyenbay_id = " + this.cbXem.getSelectionModel().getSelectedItem().getCb_id() + " AND loai = 2");
+                    ResultSet rsdg = stdg.executeQuery("SELECT * FROM ghe WHERE chuyenbay_id = " + this.cbXem.getSelectionModel().getSelectedItem().getCb_id() + " AND loai = 2");
                     while(rsdg.next()) {
+                        int sl2 = Integer.parseInt(rsdg.getString("soluong")) - 1;
+                        Statement scsl2 = conn.createStatement();
+                        scsl1.executeUpdate("UPDATE ghe SET soluong = " + sl2 + " WHERE id_ghe = " + rsdg.getString("id_ghe"));
+                        
                         Statement stvcb = conn.createStatement();
-                        stvcb.executeUpdate("UPDATE vechuyenbay SET ghe_id = " + rsdg.getString(1));
-                    } 
+                        stvcb.executeUpdate("UPDATE vechuyenbay SET ghe_id = " + rsdg.getString("id_ghe") + " WHERE chuyenbay_id = " + this.cbXem.getSelectionModel().getSelectedItem().getCb_id());
+                    }
                     TextInputDialog inp = new TextInputDialog();
                     inp.setHeaderText("Confirm password: ");
                     Optional<String> num = inp.showAndWait();
@@ -181,7 +205,7 @@ public class XemController implements Initializable {
                                 stage.setScene(new Scene(root));
                                 stage.show();
 
-                                Stage stage1 = (Stage) this.btHuy.getScene().getWindow();
+                                Stage stage1 = (Stage) this.btChange.getScene().getWindow();
                                 stage1.close();
                             } catch (IOException ex) {
                                 Logger.getLogger(XemController.class.getName()).log(Level.SEVERE, null, ex);
@@ -192,14 +216,21 @@ public class XemController implements Initializable {
                             alert.setContentText("Wrong Password");
                             alert.showAndWait();
                         }
-                    });
-                
+                    });       
                 } else {
+                    int sl1 = Integer.parseInt(rsg.getString("soluong")) + 1;
+                    Statement scsl1 = conn.createStatement();
+                    scsl1.executeUpdate("UPDATE ghe SET soluong = " + sl1 + " WHERE id_ghe = " + rsg.getString(1));
+                    
                     Statement stdg = conn.createStatement();
-                    ResultSet rsdg = stdg.executeQuery("SELECT id_ghe FROM ghe WHERE chuyenbay_id = " + this.cbXem.getSelectionModel().getSelectedItem().getCb_id() + " AND loai = 1");
-                    while(rsdg.next()) {
+                    ResultSet rsdg = stdg.executeQuery("SELECT * FROM ghe WHERE chuyenbay_id = " + this.cbXem.getSelectionModel().getSelectedItem().getCb_id() + " AND loai = 1");
+                    while (rsdg.next()) {
+                        int sl2 = Integer.parseInt(rsdg.getString("soluong")) - 1;
+                        Statement scsl2 = conn.createStatement();
+                        scsl1.executeUpdate("UPDATE ghe SET soluong = " + sl2 + " WHERE id_ghe = " + rsdg.getString("id_ghe"));
+                        
                         Statement stvcb = conn.createStatement();
-                        stvcb.executeUpdate("UPDATE vechuyenbay SET ghe_id = " + rsdg.getString(1));
+                        stvcb.executeUpdate("UPDATE vechuyenbay SET ghe_id = " + rsdg.getString(1) + " WHERE chuyenbay_id = " + this.cbXem.getSelectionModel().getSelectedItem().getCb_id());
                     }
                     TextInputDialog inp = new TextInputDialog();
                     inp.setHeaderText("Confirm password: ");
@@ -228,7 +259,7 @@ public class XemController implements Initializable {
                                 stage.setScene(new Scene(root));
                                 stage.show();
 
-                                Stage stage1 = (Stage) this.btHuy.getScene().getWindow();
+                                Stage stage1 = (Stage) this.btChange.getScene().getWindow();
                                 stage1.close();
                             } catch (IOException ex) {
                                 Logger.getLogger(XemController.class.getName()).log(Level.SEVERE, null, ex);

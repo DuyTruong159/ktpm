@@ -332,6 +332,10 @@ public class SecondaryController implements Initializable {
             ResultSet rsg = stg.executeQuery("SELECT * FROM ghe WHERE chuyenbay_id = " + idcb + " AND loai = 1");
 
             while(rsg.next()) {
+                int sl = Integer.parseInt(rsg.getString("soluong")) - 1;
+                Statement scl = conn.createStatement();
+                scl.executeUpdate("UPDATE ghe SET soluong = " + sl + " WHERE chuyenbay_id = " + idcb + " AND loai = 1");
+                
                 idg = rsg.getString("id_ghe");
                 Statement stk = conn.createStatement();
                 ResultSet rstk = stk.executeQuery("SELECT * FROM taikhoan WHERE stk like '" + this.txtStk.getText() + "'");
@@ -349,6 +353,10 @@ public class SecondaryController implements Initializable {
             ResultSet rsg = stg.executeQuery("SELECT * FROM ghe WHERE chuyenbay_id = " + idcb + " AND loai = 2");
 
             while(rsg.next()) {
+                int sl = Integer.parseInt(rsg.getString("soluong")) - 1;
+                Statement scl = conn.createStatement();
+                scl.executeUpdate("UPDATE ghe SET soluong = " + sl + " WHERE chuyenbay_id = " + idcb + " AND loai = 2");
+                
                 idg = rsg.getString("id_ghe");
                 Statement stk = conn.createStatement();
                 ResultSet rstk = stk.executeQuery("SELECT * FROM taikhoan WHERE stk like '" + this.txtStk.getText() + "'");

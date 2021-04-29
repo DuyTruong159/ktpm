@@ -135,6 +135,19 @@ public class PrimaryController implements Initializable {
             stm1.close();
             cb.setDaytime(rs.getString("daytime"));
             cb.setTimeflight(rs.getString("timeflight"));
+            
+            Statement stg1 = conn.createStatement();
+            ResultSet rsg1 = stg1.executeQuery("SELECT soluong FROM ghe WHERE chuyenbay_id = " + rs.getString("id_chuyenbay") + " AND loai = 1");
+            while (rsg1.next()) {
+                cb.setSoghe1(rsg1.getString(1));
+            }
+            
+            Statement stg2 = conn.createStatement();
+            ResultSet rsg2 = stg2.executeQuery("SELECT soluong FROM ghe WHERE chuyenbay_id = " + rs.getString("id_chuyenbay") + " AND loai = 2");
+            while (rsg2.next()) {
+                cb.setSoghe2(rsg2.getString(1));
+            }
+            
             lcb.add(cb);
         }
         
@@ -224,6 +237,12 @@ public class PrimaryController implements Initializable {
         TableColumn colTimeFlight = new TableColumn("TimeFlight"); 
         colTimeFlight.setCellValueFactory(new PropertyValueFactory("timeflight"));
         
+        TableColumn colSoghe1 = new TableColumn("Primary's Chairs"); 
+        colSoghe1.setCellValueFactory(new PropertyValueFactory("soghe1"));
+        
+        TableColumn colSoghe2 = new TableColumn("Secondary's Chairs"); 
+        colSoghe2.setCellValueFactory(new PropertyValueFactory("soghe2"));
+        
         TableColumn colDatve = new TableColumn("Dat ve");
         colDatve.setCellFactory(p -> {
             Button bt = new Button("Dat ve");
@@ -258,7 +277,7 @@ public class PrimaryController implements Initializable {
         });
           
         this.tbCb.setItems((ObservableList<Chuyenbay>) getChuyenbays());
-        this.tbCb.getColumns().addAll(colMa, colArrive, colDepart,  colDayTime, colTimeFlight, colDatve); 
+        this.tbCb.getColumns().addAll(colMa, colArrive, colDepart,  colDayTime, colTimeFlight, colSoghe1, colSoghe2, colDatve); 
     }
 
     @Override

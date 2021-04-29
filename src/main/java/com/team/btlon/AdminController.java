@@ -60,6 +60,8 @@ public class AdminController implements Initializable {
     @FXML private Button btUpdate;
     @FXML private Button btADatve;
     @FXML private Button btXem;
+    @FXML private Button btXCb;
+    @FXML private Button btAddghe;
     String p;
     
     @FXML private void btLogout (ActionEvent Event) {
@@ -179,7 +181,6 @@ public class AdminController implements Initializable {
         if(this.txtMa.getText() == "" || this.txtDepart.getText() == "" || 
                 this.txtArrive.getText() == "" || this.txtDaytime.getText() == "" 
                 || this.txtTimeflight.getText() == "") {
-            
             this.lbmess.setText("Information Empty!!");
             this.txtMa.setStyle("-fx-border-color: red;");
             this.txtArrive.setStyle("-fx-border-color: red;");
@@ -188,18 +189,32 @@ public class AdminController implements Initializable {
             this.txtTimeflight.setStyle("-fx-border-color: red;");
             
         } else {
-            PreparedStatement sta = conn.prepareStatement("INSERT INTO chuyenbay (ma, arrive_id, depart_id, daytime, timeflight) VALUES "
-                + "('" + this.txtMa.getText() + "', " + this.addArrive() + ", " + this.addDepart() 
-                + ", '" + this.txtDaytime.getText() + "', '" + this.txtTimeflight.getText() + "')");
-            sta.executeUpdate();
-
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setContentText("New chuyenbay has added!!");
-            alert.setHeaderText(null);
-            alert.showAndWait();
-
-            this.tbCb.getItems().clear();
-            this.tbCb.setItems((ObservableList<Chuyenbay>) getChuyenbays());
+            try {
+//                PreparedStatement sta = conn.prepareStatement("INSERT INTO chuyenbay (ma, arrive_id, depart_id, daytime, timeflight) VALUES "
+//                        + "('" + this.txtMa.getText() + "', " + this.addArrive() + ", " + this.addDepart()
+//                        + ", '" + this.txtDaytime.getText() + "', '" + this.txtTimeflight.getText() + "')");
+//                sta.executeUpdate();
+                
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("Addghe.fxml"));
+                Parent root = (Parent) loader.load();
+                
+                Stage stage = new Stage();
+                stage.setScene(new Scene(root));
+                stage.show();
+                
+                Stage stage1 = (Stage) this.btAddghe.getScene().getWindow();
+                stage1.close();
+                
+//                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+//                alert.setContentText("New chuyenbay has added!!");
+//                alert.setHeaderText(null);
+//                alert.showAndWait();
+//                
+//                this.tbCb.getItems().clear();
+//                this.tbCb.setItems((ObservableList<Chuyenbay>) getChuyenbays());
+            } catch (IOException ex) {
+                Logger.getLogger(AdminController.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     
         conn.close();
@@ -224,6 +239,17 @@ public class AdminController implements Initializable {
         } catch (SQLException ex) {
             Logger.getLogger(AdminController.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    @FXML private void btXemcb (ActionEvent Event) {
+        try {
+            this.loadChuyenbay();
+        } catch (SQLException ex) {
+            Logger.getLogger(AdminController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        this.btXem.setVisible(true);
+        this.btXCb.setVisible(false);
     }
     
     @FXML private void btXemve (ActionEvent Event) {
@@ -299,7 +325,8 @@ public class AdminController implements Initializable {
                 this.tbCb.setItems(FXCollections.observableArrayList(lvcb));
                 this.tbCb.getColumns().addAll(colMa, colArrive, colDepart, colDayTime, colTimeFlight, colName, colLoai, colPrice);
                 
-                this.btXem.setText("Xem chuyến bay");
+                this.btXem.setVisible(false);
+                this.btXCb.setVisible(true);
             }
         } catch (SQLException ex) {
             Logger.getLogger(AdminController.class.getName()).log(Level.SEVERE, null, ex);
@@ -328,6 +355,19 @@ public class AdminController implements Initializable {
             stm1.close();
             cb.setDaytime(rs.getString("daytime"));
             cb.setTimeflight(rs.getString("timeflight"));
+            
+            Statement stg1 = conn.createStatement();
+            ResultSet rsg1 = stg1.executeQuery("SELECT soluong FROM ghe WHERE chuyenbay_id = " + rs.getString("id_chuyenbay") + " AND loai = 1");
+            while (rsg1.next()) {
+                cb.setSoghe1(rsg1.getString(1));
+            }
+            
+            Statement stg2 = conn.createStatement();
+            ResultSet rsg2 = stg2.executeQuery("SELECT soluong FROM ghe WHERE chuyenbay_id = " + rs.getString("id_chuyenbay") + " AND loai = 2");
+            while (rsg2.next()) {
+                cb.setSoghe2(rsg2.getString(1));
+            }
+            
             lcb.add(cb);
         }
         
@@ -366,6 +406,13 @@ public class AdminController implements Initializable {
         TableColumn colTimeFlight = new TableColumn("TimeFlight"); 
         colTimeFlight.setCellValueFactory(new PropertyValueFactory("timeflight"));
         
+        TableColumn colSoghe1 = new TableColumn("Primary's Chairs"); 
+        colSoghe1.setCellValueFactory(new PropertyValueFactory("soghe1"));
+        
+        TableColumn colSoghe2 = new TableColumn("Secondary's Chairs"); 
+        colSoghe2.setCellValueFactory(new PropertyValueFactory("soghe2"));
+
+        
         TableColumn colDelete = new TableColumn("Delete");
         colDelete.setCellFactory(p -> {
             Button btDelete = new Button("Delete");
@@ -394,12 +441,16 @@ public class AdminController implements Initializable {
             return cell;
         });
         
+        this.tbCb.getColumns().clear();
+        this.tbCb.getItems().clear();
         this.tbCb.setItems((ObservableList<Chuyenbay>) getChuyenbays());
-        this.tbCb.getColumns().addAll(colMa, colArrive, colDepart,  colDayTime, colTimeFlight, colDelete); 
+        this.tbCb.getColumns().addAll(colMa, colArrive, colDepart,  colDayTime, colTimeFlight, colSoghe1, colSoghe2, colDelete); 
     }
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        this.btXem.setVisible(true);
+        this.btXCb.setVisible(false);
         try {
             this.loadChuyenbay();
         } catch (SQLException ex) {
