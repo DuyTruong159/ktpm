@@ -190,13 +190,17 @@ public class AdminController implements Initializable {
             
         } else {
             try {
-//                PreparedStatement sta = conn.prepareStatement("INSERT INTO chuyenbay (ma, arrive_id, depart_id, daytime, timeflight) VALUES "
-//                        + "('" + this.txtMa.getText() + "', " + this.addArrive() + ", " + this.addDepart()
-//                        + ", '" + this.txtDaytime.getText() + "', '" + this.txtTimeflight.getText() + "')");
-//                sta.executeUpdate();
+                PreparedStatement sta = conn.prepareStatement("INSERT INTO chuyenbay (ma, arrive_id, depart_id, daytime, timeflight) VALUES "
+                        + "('" + this.txtMa.getText() + "', " + this.addArrive() + ", " + this.addDepart()
+                        + ", '" + this.txtDaytime.getText() + "', '" + this.txtTimeflight.getText() + "')");
+                sta.executeUpdate();
                 
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("Addghe.fxml"));
                 Parent root = (Parent) loader.load();
+                
+                AddgheController agc = loader.getController();
+                agc.getCB(this.txtMa.getText(), this.txtDaytime.getText(), this.txtTimeflight.getText());
+                agc.getP(this.p);
                 
                 Stage stage = new Stage();
                 stage.setScene(new Scene(root));
@@ -204,14 +208,6 @@ public class AdminController implements Initializable {
                 
                 Stage stage1 = (Stage) this.btAddghe.getScene().getWindow();
                 stage1.close();
-                
-//                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-//                alert.setContentText("New chuyenbay has added!!");
-//                alert.setHeaderText(null);
-//                alert.showAndWait();
-//                
-//                this.tbCb.getItems().clear();
-//                this.tbCb.setItems((ObservableList<Chuyenbay>) getChuyenbays());
             } catch (IOException ex) {
                 Logger.getLogger(AdminController.class.getName()).log(Level.SEVERE, null, ex);
             }

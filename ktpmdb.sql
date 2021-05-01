@@ -24,17 +24,17 @@ DROP TABLE IF EXISTS `chuyenbay`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `chuyenbay` (
   `id_chuyenbay` int NOT NULL AUTO_INCREMENT,
-  `ma` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `ma` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
   `arrive_id` int DEFAULT NULL,
   `depart_id` int DEFAULT NULL,
   `daytime` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
   `timeflight` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
-  PRIMARY KEY (`id_chuyenbay`),
+  PRIMARY KEY (`id_chuyenbay`,`ma`),
   KEY `chuyenbay_ibfk_1_idx` (`arrive_id`),
   KEY `chuyenbay_ibfk_2_idx` (`depart_id`),
   CONSTRAINT `chuyenbay_ibfk_1` FOREIGN KEY (`arrive_id`) REFERENCES `sanbay` (`id_sanbay`),
   CONSTRAINT `chuyenbay_ibfk_2` FOREIGN KEY (`depart_id`) REFERENCES `sanbay` (`id_sanbay`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -43,7 +43,7 @@ CREATE TABLE `chuyenbay` (
 
 LOCK TABLES `chuyenbay` WRITE;
 /*!40000 ALTER TABLE `chuyenbay` DISABLE KEYS */;
-INSERT INTO `chuyenbay` VALUES (1,'A01',1,2,'01 Nov - 16:50','1h 0m'),(2,'A02',3,4,'15 Dec - 11:15','2h 20m'),(3,'A03',5,6,'21 Mar - 20:35','3h 15m'),(4,'A04',7,8,'21 Feb - 16:50','3h 25m'),(5,'A05',9,10,'25 Sep - 22:00','10h 00m'),(6,'A06',1,3,'08 Mar - 17:00','5h 15m'),(7,'A07',11,12,'18 Apr - 07:15','43h 25m'),(8,'A08',13,3,'20 Apr - 16:30','2h 55m'),(9,'A09',6,8,'21 Nov - 13:00','5h 00m'),(10,'A10',9,3,'04 Jan - 01:15','4h 20m');
+INSERT INTO `chuyenbay` VALUES (1,'A01',1,2,'01 Nov - 16:50','1h 0m'),(2,'A02',3,4,'15 Dec - 11:15','2h 20m'),(3,'A03',5,6,'21 Mar - 20:35','3h 15m'),(4,'A04',7,8,'21 Feb - 16:50','3h 25m'),(7,'A07',11,12,'18 Apr - 07:15','43h 25m'),(8,'A08',2,12,'20 Apr - 16:30','2h 55m');
 /*!40000 ALTER TABLE `chuyenbay` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -56,14 +56,14 @@ DROP TABLE IF EXISTS `ghe`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `ghe` (
   `id_ghe` int NOT NULL AUTO_INCREMENT,
-  `loai` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
-  `gia` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `loai` int NOT NULL,
+  `gia` decimal(60,0) DEFAULT NULL,
   `soluong` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
   `chuyenbay_id` int DEFAULT NULL,
   PRIMARY KEY (`id_ghe`),
   KEY `ghe_ibfk_1_idx` (`chuyenbay_id`),
   CONSTRAINT `ghe_ibfk_1` FOREIGN KEY (`chuyenbay_id`) REFERENCES `chuyenbay` (`id_chuyenbay`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -72,7 +72,7 @@ CREATE TABLE `ghe` (
 
 LOCK TABLES `ghe` WRITE;
 /*!40000 ALTER TABLE `ghe` DISABLE KEYS */;
-INSERT INTO `ghe` VALUES (1,'1','10','1000000',1),(2,'2','40','615000',1),(3,'1','10','7000000',2),(4,'2','40','5000000',2),(5,'1','10','20000000',3),(6,'2','40','15000000',3),(7,'1','10','25000000',4),(8,'2','40','21000000',4),(9,'1','10','22000000',5),(10,'2','40','17000000',5);
+INSERT INTO `ghe` VALUES (1,1,1000000,'10',1),(2,2,615000,'40',1),(3,1,7000000,'10',2),(4,2,5000000,'39',2),(5,1,20000000,'10',3),(6,2,15000000,'40',3),(7,1,25000000,'10',4),(8,2,21000000,'40',4),(11,1,17000000,'10',7),(12,2,15000000,'40',7),(13,1,13000000,'10',8),(14,2,11000000,'40',8);
 /*!40000 ALTER TABLE `ghe` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -143,7 +143,7 @@ CREATE TABLE `sanbay` (
   `id_sanbay` int NOT NULL AUTO_INCREMENT,
   `sanbay` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id_sanbay`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=40 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -152,7 +152,7 @@ CREATE TABLE `sanbay` (
 
 LOCK TABLES `sanbay` WRITE;
 /*!40000 ALTER TABLE `sanbay` DISABLE KEYS */;
-INSERT INTO `sanbay` VALUES (1,'TP HCM (SGN)'),(2,'Hà nội (HAN)'),(3,'Seoul (ICN)'),(4,'Tokyo (TYOA)'),(5,'Hồng Kông (HKG)'),(6,'Paris (PARA)'),(7,'Venice (VCE)'),(8,'Maldives (MLE)'),(9,'Sydney (SYD)'),(10,'London (LONA)'),(11,'Washington (WASA)'),(12,'Taipei (TAIA)'),(13,'Mexico City (MEX)');
+INSERT INTO `sanbay` VALUES (1,'TP HCM (SGN)'),(2,'Hà nội (HAN)'),(3,'Seoul (ICN)'),(4,'Tokyo (TYOA)'),(5,'Hồng Kông (HKG)'),(6,'Paris (PARA)'),(7,'Venice (VCE)'),(8,'Maldives (MLE)'),(9,'Sydney (SYD)'),(10,'London (LONA)'),(11,'Washington (WASA)'),(12,'Taipei (TAIA)'),(13,'Mexico City (MEX)'),(16,'e'),(17,'a'),(18,'s'),(19,'d'),(20,'f'),(21,'d'),(22,'e'),(23,'e'),(24,'s'),(25,'e'),(26,'s'),(27,'d'),(28,'d'),(29,'d'),(30,'d'),(31,'s'),(32,'d'),(33,'s'),(34,'d'),(35,'s'),(36,'d'),(37,'s'),(38,'s'),(39,'d');
 /*!40000 ALTER TABLE `sanbay` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -168,7 +168,7 @@ CREATE TABLE `taikhoan` (
   `stk` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
   `money` decimal(65,0) DEFAULT NULL,
   PRIMARY KEY (`id_taikhoan`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -177,7 +177,7 @@ CREATE TABLE `taikhoan` (
 
 LOCK TABLES `taikhoan` WRITE;
 /*!40000 ALTER TABLE `taikhoan` DISABLE KEYS */;
-INSERT INTO `taikhoan` VALUES (1,'11223344',1000000000),(2,'159211120',NULL);
+INSERT INTO `taikhoan` VALUES (1,'11223344',1000000000),(2,'159211120',100000000);
 /*!40000 ALTER TABLE `taikhoan` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -200,7 +200,7 @@ CREATE TABLE `vechuyenbay` (
   CONSTRAINT `vechuyenbay_ibfk_1` FOREIGN KEY (`chuyenbay_id`) REFERENCES `chuyenbay` (`id_chuyenbay`),
   CONSTRAINT `vechuyenbay_ibfk_2` FOREIGN KEY (`ghe_id`) REFERENCES `ghe` (`id_ghe`),
   CONSTRAINT `vechuyenbay_ibfk_3` FOREIGN KEY (`khachhang_id`) REFERENCES `khachhang` (`id_khachhang`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -221,4 +221,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-04-17  2:26:07
+-- Dump completed on 2021-05-01 11:19:38

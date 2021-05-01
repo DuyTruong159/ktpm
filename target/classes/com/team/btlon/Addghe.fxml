@@ -14,18 +14,19 @@
 
 <GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="453.0" prefWidth="600.0" stylesheets="@../../../../java/com/team/btlon/Style.css" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.team.btlon.AddgheController">
   <columnConstraints>
-      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+      <ColumnConstraints hgrow="SOMETIMES" maxWidth="200.0" minWidth="10.0" prefWidth="138.2949981689453" />
+    <ColumnConstraints hgrow="SOMETIMES" maxWidth="244.0" minWidth="10.0" prefWidth="136.86428833007812" />
+    <ColumnConstraints hgrow="SOMETIMES" maxWidth="177.92523193359375" minWidth="10.0" prefWidth="138.47097778320312" />
+      <ColumnConstraints hgrow="SOMETIMES" maxWidth="200.0" minWidth="10.0" prefWidth="125.52902221679688" />
   </columnConstraints>
   <rowConstraints>
-    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="81.12190628051758" minHeight="10.0" prefHeight="77.73547744750977" vgrow="SOMETIMES" />
+    <RowConstraints maxHeight="81.12190628051758" minHeight="10.0" prefHeight="51.06785583496094" vgrow="SOMETIMES" />
+    <RowConstraints maxHeight="125.0" minHeight="10.0" prefHeight="72.58309936523438" vgrow="SOMETIMES" />
+    <RowConstraints maxHeight="146.0" minHeight="0.0" prefHeight="51.8406982421875" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="198.0" minHeight="10.0" prefHeight="67.22714233398438" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="107.50143432617188" minHeight="10.0" prefHeight="47.96954345703125" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="88.44049072265625" minHeight="10.0" prefHeight="72.03045654296875" vgrow="SOMETIMES" />
   </rowConstraints>
    <children>
       <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="63.0" prefWidth="1339.0" text=" Travel &amp; Go" textAlignment="CENTER" GridPane.columnSpan="4">
@@ -49,66 +50,78 @@
             </LinearGradient>
          </textFill>
       </Label>
-      <Label text="Label" GridPane.rowIndex="1">
+      <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="27.0" prefWidth="168.0" text="Classes :" GridPane.rowIndex="2">
          <font>
-            <Font name="Arial" size="13.0" />
+            <Font name="Arial" size="24.0" />
          </font></Label>
-      <Label text="Label" GridPane.columnIndex="1" GridPane.rowIndex="1">
-         <font>
-            <Font name="Arial" size="13.0" />
-         </font></Label>
-      <Label text="Label" GridPane.columnIndex="2" GridPane.rowIndex="1">
-         <font>
-            <Font name="Arial" size="13.0" />
-         </font></Label>
-      <Label text="Label" GridPane.columnIndex="2" GridPane.rowIndex="2">
-         <font>
-            <Font name="Arial" size="13.0" />
-         </font></Label>
-      <Label text="Label" GridPane.rowIndex="3">
-         <font>
-            <Font name="Arial" size="13.0" />
-         </font></Label>
-      <Label text="Label" GridPane.columnIndex="1" GridPane.rowIndex="3">
-         <font>
-            <Font name="Arial" size="13.0" />
-         </font></Label>
-      <Label text="Label" GridPane.columnIndex="2" GridPane.rowIndex="3">
-         <font>
-            <Font name="Arial" size="13.0" />
-         </font></Label>
-      <Label text="Label" GridPane.columnIndex="2" GridPane.rowIndex="4">
-         <font>
-            <Font name="Arial" size="13.0" />
-         </font></Label>
-      <TextField GridPane.columnIndex="3" GridPane.rowIndex="1">
+      <TextField fx:id="txtsoluong1" alignment="CENTER" GridPane.columnIndex="3" GridPane.rowIndex="2">
          <font>
             <Font name="Arial" size="13.0" />
          </font></TextField>
-      <TextField GridPane.columnIndex="3" GridPane.rowIndex="2">
+      <TextField fx:id="txtprice1" alignment="CENTER" GridPane.columnIndex="3" GridPane.rowIndex="3">
          <font>
             <Font name="Arial" size="13.0" />
          </font></TextField>
-      <TextField GridPane.columnIndex="3" GridPane.rowIndex="3">
+      <TextField fx:id="txtsoluong2" alignment="CENTER" GridPane.columnIndex="3" GridPane.rowIndex="4">
          <font>
             <Font name="Arial" size="13.0" />
          </font></TextField>
-      <TextField GridPane.columnIndex="3" GridPane.rowIndex="4">
+      <TextField fx:id="txtprice2" alignment="CENTER" GridPane.columnIndex="3" GridPane.rowIndex="5">
          <font>
             <Font name="Arial" size="13.0" />
          </font></TextField>
-      <Button mnemonicParsing="false" text="Button" GridPane.columnIndex="2" GridPane.rowIndex="5">
+      <Button fx:id="bthuy" mnemonicParsing="false" onAction="#btCancel" prefHeight="53.0" prefWidth="113.0" text="Cancel" GridPane.columnIndex="2" GridPane.rowIndex="6">
          <font>
-            <Font name="Arial" size="13.0" />
+            <Font name="Arial" size="24.0" />
          </font></Button>
-      <Button mnemonicParsing="false" text="Button" GridPane.columnIndex="1" GridPane.rowIndex="5">
+      <Button fx:id="btaddht" mnemonicParsing="false" onAction="#btAdd" prefHeight="55.0" prefWidth="91.0" text="Add" GridPane.columnIndex="1" GridPane.rowIndex="6">
          <GridPane.margin>
             <Insets />
          </GridPane.margin>
          <font>
-            <Font name="Arial" size="13.0" />
+            <Font name="Arial" size="24.0" />
          </font>
       </Button>
+      <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="27.0" prefWidth="168.0" text="Classes :" GridPane.rowIndex="4">
+         <font>
+            <Font name="Arial" size="24.0" />
+         </font>
+      </Label>
+      <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="34.0" prefWidth="165.0" text="Primary" textAlignment="CENTER" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="2">
+         <font>
+            <Font name="Arial" size="24.0" />
+         </font>
+      </Label>
+      <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="27.0" prefWidth="168.0" text="Secondary" GridPane.columnIndex="1" GridPane.rowIndex="4">
+         <font>
+            <Font name="Arial" size="24.0" />
+         </font>
+      </Label>
+      <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="27.0" prefWidth="168.0" text="Số lượng :" wrapText="true" GridPane.columnIndex="2" GridPane.rowIndex="4">
+         <font>
+            <Font name="Arial" size="24.0" />
+         </font>
+      </Label>
+      <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="27.0" prefWidth="168.0" text="Price :" GridPane.columnIndex="2" GridPane.rowIndex="5">
+         <font>
+            <Font name="Arial" size="24.0" />
+         </font>
+      </Label>
+      <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="27.0" prefWidth="168.0" text="Số lượng :" wrapText="true" GridPane.columnIndex="2" GridPane.rowIndex="2">
+         <font>
+            <Font name="Arial" size="24.0" />
+         </font>
+      </Label>
+      <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="27.0" prefWidth="168.0" text="Price :" GridPane.columnIndex="2" GridPane.rowIndex="3">
+         <font>
+            <Font name="Arial" size="24.0" />
+         </font>
+      </Label>
+      <Label fx:id="lbmess" alignment="CENTER" contentDisplay="CENTER" prefHeight="16.0" prefWidth="1008.0" textFill="RED" GridPane.columnSpan="4" GridPane.rowIndex="1">
+         <font>
+            <Font name="Arial" size="24.0" />
+         </font>
+      </Label>
    </children>
    <padding>
       <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />

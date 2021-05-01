@@ -81,7 +81,7 @@
          <font>
             <Font name="Arial" size="24.0" />
          </font></Button>
-      <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#btAdd" prefHeight="59.0" prefWidth="110.0" text="Add" GridPane.columnIndex="3" GridPane.rowIndex="4">
+      <Button fx:id="btAddghe" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#btAdd" prefHeight="59.0" prefWidth="110.0" text="Add" GridPane.columnIndex="3" GridPane.rowIndex="4">
          <font>
             <Font name="Arial" size="24.0" />
          </font>
