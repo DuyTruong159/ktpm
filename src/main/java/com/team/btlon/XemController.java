@@ -6,6 +6,7 @@
 package com.team.btlon;
 
 import com.team.pojo.Chuyenbay;
+import com.team.pojo.Ghe;
 import com.team.pojo.Vechuyenbay;
 import com.team.service.JdbcUtils;
 import java.io.IOException;
@@ -92,6 +93,13 @@ public class XemController implements Initializable {
         }
     }
     
+    private void xoa(Vechuyenbay vcb) throws SQLException {
+        Connection conn = JdbcUtils.getConn();
+        Statement stvcb = conn.createStatement();
+        stvcb.executeUpdate("DELETE FROM vechuyenbay WHERE khachhang_id = " + vcb.getKhachhang_id() + " AND chuyenbay_id = " + vcb.getChuyenbay_id());
+        conn.close();   
+    }
+    
     @FXML private void btXoa(ActionEvent Event) {
         try {
             Connection conn = JdbcUtils.getConn();           
@@ -107,8 +115,8 @@ public class XemController implements Initializable {
                 }
             }
             
-            Statement stvcb = conn.createStatement();
-            stvcb.executeUpdate("DELETE FROM vechuyenbay WHERE khachhang_id = 3 AND chuyenbay_id = " + this.cbXem.getSelectionModel().getSelectedItem().getCb_id());
+            Vechuyenbay vcb = new Vechuyenbay("3",this.cbXem.getSelectionModel().getSelectedItem().getCb_id());
+            xoa(vcb);
             
             TextInputDialog inp = new TextInputDialog();
             inp.setHeaderText("Confirm password: ");
@@ -154,6 +162,20 @@ public class XemController implements Initializable {
         }
     }
     
+    private void doive(Vechuyenbay vcb) throws SQLException {
+        Connection conn = JdbcUtils.getConn();
+        Statement stvcb = conn.createStatement();
+        stvcb.executeUpdate("UPDATE vechuyenbay SET ghe_id = " + vcb.getKhachhang_id() + " WHERE chuyenbay_id = " + vcb.getChuyenbay_id());            
+        conn.close();
+    }
+    
+    private void doighe(Ghe g) throws SQLException {
+        Connection conn = JdbcUtils.getConn();
+        Statement scsl1 = conn.createStatement();
+        scsl1.executeUpdate("UPDATE ghe SET soluong = " + g.getSl() + " WHERE id_ghe = " + g.getGia());
+        conn.close();
+    }
+    
     @FXML private void btDoi() throws SQLException {
         Connection conn = JdbcUtils.getConn();
         Statement st = conn.createStatement();
@@ -165,18 +187,18 @@ public class XemController implements Initializable {
             while (rsg.next()) {
                 if("1".equals(rsg.getString("loai"))) {
                     int sl1 = Integer.parseInt(rsg.getString("soluong")) + 1;
-                    Statement scsl1 = conn.createStatement();
-                    scsl1.executeUpdate("UPDATE ghe SET soluong = " + sl1 + " WHERE id_ghe = " + rsg.getString(1));
+                    Ghe g = new Ghe(sl1,rsg.getString(1));
+                    doighe(g);
                     
                     Statement stdg = conn.createStatement();
                     ResultSet rsdg = stdg.executeQuery("SELECT * FROM ghe WHERE chuyenbay_id = " + this.cbXem.getSelectionModel().getSelectedItem().getCb_id() + " AND loai = 2");
                     while(rsdg.next()) {
                         int sl2 = Integer.parseInt(rsdg.getString("soluong")) - 1;
-                        Statement scsl2 = conn.createStatement();
-                        scsl1.executeUpdate("UPDATE ghe SET soluong = " + sl2 + " WHERE id_ghe = " + rsdg.getString("id_ghe"));
+                        Ghe g1 = new Ghe(sl2,rsdg.getString("id_ghe"));
+                        doighe(g1);
                         
-                        Statement stvcb = conn.createStatement();
-                        stvcb.executeUpdate("UPDATE vechuyenbay SET ghe_id = " + rsdg.getString("id_ghe") + " WHERE chuyenbay_id = " + this.cbXem.getSelectionModel().getSelectedItem().getCb_id());
+                        Vechuyenbay vcb = new Vechuyenbay(rsdg.getString("id_ghe"), this.cbXem.getSelectionModel().getSelectedItem().getCb_id());
+                        doive(vcb);
                     }
                     TextInputDialog inp = new TextInputDialog();
                     inp.setHeaderText("Confirm password: ");
@@ -219,18 +241,18 @@ public class XemController implements Initializable {
                     });       
                 } else {
                     int sl1 = Integer.parseInt(rsg.getString("soluong")) + 1;
-                    Statement scsl1 = conn.createStatement();
-                    scsl1.executeUpdate("UPDATE ghe SET soluong = " + sl1 + " WHERE id_ghe = " + rsg.getString(1));
+                    Ghe g = new Ghe(sl1,rsg.getString(1));
+                    doighe(g);
                     
                     Statement stdg = conn.createStatement();
                     ResultSet rsdg = stdg.executeQuery("SELECT * FROM ghe WHERE chuyenbay_id = " + this.cbXem.getSelectionModel().getSelectedItem().getCb_id() + " AND loai = 1");
                     while (rsdg.next()) {
                         int sl2 = Integer.parseInt(rsdg.getString("soluong")) - 1;
-                        Statement scsl2 = conn.createStatement();
-                        scsl1.executeUpdate("UPDATE ghe SET soluong = " + sl2 + " WHERE id_ghe = " + rsdg.getString("id_ghe"));
+                        Ghe g1 = new Ghe(sl2,rsdg.getString("id_ghe"));
+                        doighe(g1);
                         
-                        Statement stvcb = conn.createStatement();
-                        stvcb.executeUpdate("UPDATE vechuyenbay SET ghe_id = " + rsdg.getString(1) + " WHERE chuyenbay_id = " + this.cbXem.getSelectionModel().getSelectedItem().getCb_id());
+                        Vechuyenbay vcb = new Vechuyenbay(rsdg.getString(1), this.cbXem.getSelectionModel().getSelectedItem().getCb_id());
+                        doive(vcb);
                     }
                     TextInputDialog inp = new TextInputDialog();
                     inp.setHeaderText("Confirm password: ");

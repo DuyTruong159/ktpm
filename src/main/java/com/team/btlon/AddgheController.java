@@ -5,6 +5,7 @@
  */
 package com.team.btlon;
 
+import com.team.pojo.Ghe;
 import com.team.service.JdbcUtils;
 import java.io.IOException;
 import java.net.URL;
@@ -58,6 +59,17 @@ public class AddgheController implements Initializable {
         return this.p = text;
     }
     
+    private void addghe(Ghe g1, Ghe g2) throws SQLException {
+        Connection conn = JdbcUtils.getConn();
+        Statement st1 = conn.createStatement();
+        st1.executeUpdate("INSERT INTO ghe (loai, gia, soluong, chuyenbay_id) VALUES (1, " + 
+                g1.getGia() + ", " + g1.getSoluong() + ", " + this.idcb + ")");
+                
+        Statement st2 = conn.createStatement();
+        st2.executeUpdate("INSERT INTO ghe (loai, gia, soluong, chuyenbay_id) VALUES (2, " + 
+                g2.getGia() + ", " + g2.getSoluong() + ", " + this.idcb + ")");
+    }
+    
     @FXML private void btAdd (ActionEvent Event) throws SQLException {
         if(this.txtprice1.getText().isBlank() || this.txtprice2.getText().isBlank() 
                 || this.txtsoluong1.getText().isBlank() || this.txtsoluong2.getText().isBlank()) {
@@ -68,14 +80,10 @@ public class AddgheController implements Initializable {
             this.txtsoluong2.setStyle("-fx-border-color: red;");
         } else {
             try {
-                Connection conn = JdbcUtils.getConn();
-                Statement st1 = conn.createStatement();
-                st1.executeUpdate("INSERT INTO ghe (loai, gia, soluong, chuyenbay_id) VALUES (1, " +
-                        this.txtprice1.getText() + ", " + this.txtsoluong1.getText() + ", " + this.idcb + ")");
-                
-                Statement st2 = conn.createStatement();
-                st2.executeUpdate("INSERT INTO ghe (loai, gia, soluong, chuyenbay_id) VALUES (2, " +
-                        this.txtprice2.getText() + ", " + this.txtsoluong2.getText() + ", " + this.idcb + ")");
+                Ghe g1 = new Ghe(this.txtprice1.getText(), this.txtsoluong1.getText());
+                Ghe g2 = new Ghe(this.txtprice2.getText(), this.txtsoluong2.getText());
+                addghe(g1,g2);
+         
                 
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setContentText("New chuyenbay has added!!");

@@ -22,6 +22,17 @@ public class Vechuyenbay {
         this.cb_id = cb_id;
     }
     
+    public Vechuyenbay(String chuyenbay_id, String khachhang_id, String ghe_id) {
+        this.chuyenbay_id = chuyenbay_id;
+        this.khachhang_id = khachhang_id;
+        this.ghe_id = ghe_id;
+    }
+    
+    public Vechuyenbay(String khachhang_id, String chuyenbay_id) {
+        this.chuyenbay_id = chuyenbay_id;
+        this.khachhang_id = khachhang_id;
+    }
+    
     public Vechuyenbay() {
     
     }

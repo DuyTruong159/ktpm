@@ -176,8 +176,16 @@ public class AdminController implements Initializable {
         return d;
     }
     
-    @FXML private void btAdd (ActionEvent Event) throws SQLException {
+    private void addcb(Chuyenbay cb) throws SQLException {
         Connection conn = JdbcUtils.getConn();
+        PreparedStatement sta = conn.prepareStatement("INSERT INTO chuyenbay (ma, arrive_id, depart_id, daytime, timeflight) VALUES "
+                        + "('" + cb.getMa() + "', " + this.addArrive() + ", " + this.addDepart()
+                        + ", '" + cb.getDaytime() + "', '" + cb.getTimeflight() + "')");
+        sta.executeUpdate();
+        conn.close();
+    }
+    
+    @FXML private void btAdd (ActionEvent Event) throws SQLException {
         if(this.txtMa.getText() == "" || this.txtDepart.getText() == "" || 
                 this.txtArrive.getText() == "" || this.txtDaytime.getText() == "" 
                 || this.txtTimeflight.getText() == "") {
@@ -190,10 +198,8 @@ public class AdminController implements Initializable {
             
         } else {
             try {
-                PreparedStatement sta = conn.prepareStatement("INSERT INTO chuyenbay (ma, arrive_id, depart_id, daytime, timeflight) VALUES "
-                        + "('" + this.txtMa.getText() + "', " + this.addArrive() + ", " + this.addDepart()
-                        + ", '" + this.txtDaytime.getText() + "', '" + this.txtTimeflight.getText() + "')");
-                sta.executeUpdate();
+                Chuyenbay cb = new Chuyenbay(this.txtMa.getText(), this.txtArrive.getText(), this.txtDepart.getText(), this.txtDaytime.getText(), this.txtTimeflight.getText());
+                addcb(cb);
                 
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("Addghe.fxml"));
                 Parent root = (Parent) loader.load();
@@ -212,18 +218,20 @@ public class AdminController implements Initializable {
                 Logger.getLogger(AdminController.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+    }
     
-        conn.close();
+    private void updatecb(Chuyenbay cb) throws SQLException {
+        Connection conn = JdbcUtils.getConn();
+        Statement stu = conn.createStatement();
+        stu.executeUpdate("UPDATE chuyenbay SET arrive_id = " + this.addArrive() + ", depart_id = " + this.addDepart() +
+                            ", daytime = '" + cb.getDaytime() + "', timeflight = '" + cb.getTimeflight() + 
+                            "' WHERE ma = '" + cb.getMa() + "'");
     }
     
     @FXML private void btUdate (ActionEvent Event) throws SQLException {
-        Connection conn = JdbcUtils.getConn();
         try {
             Chuyenbay cb = (Chuyenbay) this.tbCb.getSelectionModel().getSelectedItem();
-            Statement stu = conn.createStatement();
-            stu.executeUpdate("UPDATE chuyenbay SET arrive_id = " + this.addArrive() + ", depart_id = " + this.addDepart() +
-                                ", daytime = '" + this.txtDaytime.getText() + "', timeflight = '" + this.txtTimeflight.getText() + 
-                                "' WHERE ma = '" + cb.getMa() + "'");
+            updatecb(cb);
 
             this.tbCb.getItems().clear();
             this.tbCb.setItems((ObservableList<Chuyenbay>) getChuyenbays());

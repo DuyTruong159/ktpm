@@ -5,6 +5,7 @@
  */
 package com.team.btlon;
 
+import com.team.pojo.Khachhang;
 import com.team.pojo.Nganhang;
 import com.team.service.JdbcUtils;
 import java.io.IOException;
@@ -82,7 +83,8 @@ public class RegisterController implements Initializable {
             this.txtconfirmpw.setStyle("-fx-border-color: red;");
         } else {
             try {
-                Register();
+                Khachhang k = new Khachhang(this.txtusername.getText(), this.txtcmnd.getText(), this.txtpassword.getText(), this.cbBank.getSelectionModel().getSelectedItem().getId_nganhang());
+                Register(k);
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setHeaderText(null);
                 alert.setContentText("Welcome " + this.txtusername.getText());
@@ -123,16 +125,11 @@ public class RegisterController implements Initializable {
         return idstk;
     }
     
-    private void Register() throws SQLException {
-        String name = this.txtusername.getText();
-        String cmnd = this.txtcmnd.getText();
-        int nganhang = this.cbBank.getSelectionModel().getSelectedItem().getId_nganhang();
-        String pass = this.txtpassword.getText();
-        
+    private void Register(Khachhang k) throws SQLException {
         Connection conn = JdbcUtils.getConn();
         Statement stm = conn.createStatement();
         stm.executeUpdate("INSERT INTO khachhang (name, cmnd, nganhang_id, password, stk_id) VALUES "
-                + "('" + name +"','" + cmnd + "','" + nganhang + "','" + pass + "','" + this.getStk() + "')");    
+                + "('" + k.getName() +"','" + k.getCmnd() + "','" + k.getNganhang_id() + "','" + k.getPassword() + "','" + this.getStk() + "')");    
     }
     
     private List<Nganhang> getNganhang() throws SQLException {

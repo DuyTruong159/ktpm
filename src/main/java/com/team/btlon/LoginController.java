@@ -5,6 +5,7 @@
  */
 package com.team.btlon;
 
+import com.team.pojo.Khachhang;
 import com.team.service.JdbcUtils;
 import java.io.IOException;
 import java.lang.ModuleLayer.Controller;
@@ -48,18 +49,19 @@ public class LoginController implements Initializable {
             this.lbmess.setText("Insert username and password");
         } else {
             try {
-                getLogin();
+                Khachhang k = new Khachhang(this.txtusername.getText(), this.txtpassword.getText());
+                getLogin(k);
             } catch (SQLException ex) {
                 Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
             }
         }    
     }
     
-    private void getLogin() throws SQLException {
+    private void getLogin(Khachhang k) throws SQLException {
         Connection conn = JdbcUtils.getConn();
         Statement stm = conn.createStatement();
         ResultSet rs = stm.executeQuery("SELECT count(1) FROM khachhang WHERE name = '" 
-                                        + this.txtusername.getText() + "' and password = '" + this.txtpassword.getText() + "'");
+                                        + k.getName() + "' and password = '" + k.getPassword() + "'");
         while(rs.next()) {
             if (rs.getInt(1) == 1) {
                 Alert alert = new Alert(AlertType.INFORMATION);
@@ -67,7 +69,7 @@ public class LoginController implements Initializable {
                 alert.setHeaderText(null);
                 alert.showAndWait();
                 
-                if ("admin".equals(this.txtusername.getText()) && "admin".equals(this.txtpassword.getText())) {
+                if ("admin".equals(k.getName()) && "admin".equals(k.getPassword())) {
                     try {
                         FXMLLoader loader = new FXMLLoader(getClass().getResource("Admin.fxml"));
                         Parent root = (Parent) loader.load();

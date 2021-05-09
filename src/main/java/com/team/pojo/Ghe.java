@@ -10,29 +10,21 @@ package com.team.pojo;
  * @author duytruong
  */
 public class Ghe {
-    private String loai;
     private String gia;
+    private String soluong;
+    private int sl;
     
-    public Ghe(String loai, String gia) {
+    public Ghe(String gia, String soluong) {
         this.gia = gia;
-        this.loai = loai;
+        this.soluong = soluong;
+    }
+    
+    public Ghe(int sl, String soluong) {
+        this.sl = sl;
+        this.soluong = soluong;
     }
     
     public Ghe() {
-    }
-
-    /**
-     * @return the loai
-     */
-    public String getLoai() {
-        return loai;
-    }
-
-    /**
-     * @param loai the loai to set
-     */
-    public void setLoai(String loai) {
-        this.loai = loai;
     }
 
     /**
@@ -47,6 +39,34 @@ public class Ghe {
      */
     public void setGia(String gia) {
         this.gia = gia;
+    }
+
+    /**
+     * @return the soluong
+     */
+    public String getSoluong() {
+        return soluong;
+    }
+
+    /**
+     * @param soluong the soluong to set
+     */
+    public void setSoluong(String soluong) {
+        this.soluong = soluong;
+    }
+
+    /**
+     * @return the sl
+     */
+    public int getSl() {
+        return sl;
+    }
+
+    /**
+     * @param sl the sl to set
+     */
+    public void setSl(int sl) {
+        this.sl = sl;
     }
     
     

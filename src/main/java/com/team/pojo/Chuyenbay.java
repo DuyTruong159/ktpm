@@ -29,6 +29,15 @@ public class Chuyenbay {
         this.soghe1 = soghe1;
         this.soghe2 = soghe2;
     }
+    
+    public Chuyenbay(String ma, String arrive, String depart, String daytime, String timeflight) {
+        this.ma = ma;
+        this.arrive = arrive;
+        this.depart = depart;
+        this.daytime = daytime;
+        this.timeflight = timeflight;
+        
+    }
 
     public Chuyenbay() {
     

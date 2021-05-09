@@ -1,11 +1,12 @@
 package com.team.btlon;
 
+import com.team.pojo.Khachhang;
 import com.team.pojo.Nganhang;
+import com.team.pojo.Vechuyenbay;
 import com.team.service.JdbcUtils;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -15,13 +16,11 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -29,19 +28,13 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.ToggleGroup;
-import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
-import javafx.stage.Window;
-import javafx.stage.WindowEvent;
 
 public class SecondaryController implements Initializable {
     
@@ -371,9 +364,16 @@ public class SecondaryController implements Initializable {
             stg.close();
         }
         
-        Statement dv = conn.createStatement();
-        dv.executeUpdate("INSERT INTO vechuyenbay (chuyenbay_id, khachhang_id, ghe_id) VALUES (" + idcb + ", " + khid + ", " + idg + ")");
+        Vechuyenbay vcb = new Vechuyenbay(idcb, khid, idg);
+        datvechuyenbay(vcb);
         
+        conn.close();
+    }
+    
+    private void datvechuyenbay(Vechuyenbay vcb) throws SQLException {
+        Connection conn = JdbcUtils.getConn();
+        Statement dv = conn.createStatement();
+        dv.executeUpdate("INSERT INTO vechuyenbay (chuyenbay_id, khachhang_id, ghe_id) VALUES (" + vcb.getChuyenbay_id() + ", " + vcb.getKhachhang_id() + ", " + vcb.getGhe_id() + ")");
         conn.close();
     }
     
