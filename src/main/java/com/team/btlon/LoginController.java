@@ -57,7 +57,7 @@ public class LoginController implements Initializable {
         }    
     }
     
-    private void getLogin(Khachhang k) throws SQLException {
+    public void getLogin(Khachhang k) throws SQLException {
         Connection conn = JdbcUtils.getConn();
         Statement stm = conn.createStatement();
         ResultSet rs = stm.executeQuery("SELECT count(1) FROM khachhang WHERE name = '" 

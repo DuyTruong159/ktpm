@@ -1,0 +1,4 @@
+--patch-module
+com.team.btlon=_
+--add-reads
+com.team.btlon=ALL-UNNAMED

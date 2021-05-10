@@ -13,6 +13,7 @@ public class Ghe {
     private String gia;
     private String soluong;
     private int sl;
+    private String cb_id;
     
     public Ghe(String gia, String soluong) {
         this.gia = gia;
@@ -22,6 +23,10 @@ public class Ghe {
     public Ghe(int sl, String soluong) {
         this.sl = sl;
         this.soluong = soluong;
+    }
+    
+    public Ghe(String cb_id) {
+        this.cb_id = cb_id;
     }
     
     public Ghe() {
@@ -68,7 +73,18 @@ public class Ghe {
     public void setSl(int sl) {
         this.sl = sl;
     }
-    
-    
-    
+
+    /**
+     * @return the cb_id
+     */
+    public String getCb_id() {
+        return cb_id;
+    }
+
+    /**
+     * @param cb_id the cb_id to set
+     */
+    public void setCb_id(String cb_id) {
+        this.cb_id = cb_id;
+    }
 }

@@ -38,6 +38,10 @@ public class Chuyenbay {
         this.timeflight = timeflight;
         
     }
+    
+    public Chuyenbay(String ma) {
+        this.ma = ma;
+    }
 
     public Chuyenbay() {
     

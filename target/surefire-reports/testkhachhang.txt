@@ -1,0 +1,13 @@
+-------------------------------------------------------------------------------
+Test set: testkhachhang
+-------------------------------------------------------------------------------
+Tests run: 2, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 1.053 sec <<< FAILURE!
+testkhachhang.testRegister()  Time elapsed: 0.145 sec  <<< FAILURE!
+org.opentest4j.AssertionFailedError: expected: <1> but was: <4>
+	at org.junit.jupiter.api.AssertionUtils.fail(AssertionUtils.java:55)
+	at org.junit.jupiter.api.AssertionUtils.failNotEqual(AssertionUtils.java:62)
+	at org.junit.jupiter.api.AssertEquals.assertEquals(AssertEquals.java:150)
+	at org.junit.jupiter.api.AssertEquals.assertEquals(AssertEquals.java:145)
+	at org.junit.jupiter.api.Assertions.assertEquals(Assertions.java:511)
+	at testkhachhang.testRegister(testkhachhang.java:52)
+

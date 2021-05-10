@@ -225,7 +225,7 @@ public class AdminController implements Initializable {
         Statement stu = conn.createStatement();
         stu.executeUpdate("UPDATE chuyenbay SET arrive_id = " + this.addArrive() + ", depart_id = " + this.addDepart() +
                             ", daytime = '" + cb.getDaytime() + "', timeflight = '" + cb.getTimeflight() + 
-                            "' WHERE ma = '" + cb.getMa() + "'");
+                            "', ma = '" + cb.getMa() + "' WHERE ma = '" + cb.getMa() + "'");
     }
     
     @FXML private void btUdate (ActionEvent Event) throws SQLException {

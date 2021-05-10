@@ -1,0 +1,8 @@
+-------------------------------------------------------------------------------
+Test set: testsearch
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 0.053 s <<< FAILURE! - in testsearch
+testsearch  Time elapsed: 0.053 s  <<< ERROR!
+java.lang.IllegalAccessError: class testsearch (in unnamed module @0x333291e3) cannot access class com.team.service.JdbcUtils (in module com.team.btlon) because module com.team.btlon does not export com.team.service to unnamed module @0x333291e3
+	at testsearch.setUpClass(testsearch.java:28)
+
