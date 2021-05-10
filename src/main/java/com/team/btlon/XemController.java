@@ -158,7 +158,7 @@ public class XemController implements Initializable {
                 }
             });
         } catch (SQLException ex) {
-            Logger.getLogger(XemController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(XemController.class.getName()).log(Level.SEVERE, null, ex); 
         }
     }
     

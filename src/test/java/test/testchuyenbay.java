@@ -87,10 +87,7 @@ public class testchuyenbay {
     
     @Test
     public void testXemVeCb() throws SQLException {
-        Vechuyenbay vcb = new Vechuyenbay("8", "3", "14");
-        Utils.datVe(vcb);
-        
-        List<All> la = Utils.xemVeCb("8", "3");
+        List<All> la = Utils.xemVeCb("1", "3");
         assertEquals(1,la.size());
     }
 }

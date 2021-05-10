@@ -118,7 +118,7 @@ public class Utils {
         Connection conn = JdbcUtils.getConn();
         Statement st = conn.createStatement();
         ResultSet rs = st.executeQuery("SELECT * FROM vechuyenbay WHERE chuyenbay_id = " + id_cb + " AND khachhang_id = " + kh_id);
-        List lvcb = new ArrayList<>();
+        List<All> lvcb = new ArrayList<>();
         while (rs.next()) {
             All a = new All();
             Statement stcb = conn.createStatement();
@@ -158,7 +158,51 @@ public class Utils {
         return lvcb;
     }
     
-    public static void datVe(Vechuyenbay vcb) throws SQLException {
+    public static List<All> XemCbByGhe(String cb_id, String ghe_id) throws SQLException {
+        Connection conn = JdbcUtils.getConn();
+        Statement st = conn.createStatement();
+        ResultSet rs = st.executeQuery("SELECT * FROM vechuyenbay WHERE chuyenbay_id = " + cb_id + " AND ghe_id = " + ghe_id);
+        List<All> lvcb = new ArrayList<>();
+        while (rs.next()) {
+            All a = new All();
+            Statement stcb = conn.createStatement();
+            ResultSet rscb = stcb.executeQuery("SELECT * FROM chuyenbay WHERE id_chuyenbay = " + rs.getString("chuyenbay_id"));
+            while(rscb.next()) {
+                a.setMa(rscb.getString("ma"));
+                Statement stm1 = conn.createStatement();
+                ResultSet rs1 = stm1.executeQuery("SELECT * FROM sanbay WHERE id_sanbay = " + rscb.getString("arrive_id"));
+                while (rs1.next()) {
+                    a.setArrive(rs1.getString("sanbay"));
+                }
+                rs1 = stm1.executeQuery("SELECT * FROM sanbay WHERE id_sanbay = " + rscb.getString("depart_id"));
+                while (rs1.next()) {
+                    a.setDepart(rs1.getString("sanbay"));
+                }
+                stm1.close();
+                a.setDaytime(rscb.getString("daytime"));
+                a.setTimeflight(rscb.getString("timeflight"));
+            }
+            Statement stkh = conn.createStatement();
+            ResultSet rskh = stkh.executeQuery("SELECT name FROM khachhang WHERE id_khachhang = " + rs.getString("khachhang_id"));
+            while(rskh.next()) {
+                a.setName(rskh.getString(1));
+            }
+            Statement stg = conn.createStatement();
+            ResultSet rsg = stg.executeQuery("SELECT * FROM ghe WHERE id_ghe = " + rs.getString("ghe_id"));
+            while(rsg.next()) {
+                a.setGia(String.format("%,d", Integer.parseInt(rsg.getString("gia"))) + " VND");
+                if("1".equals(rsg.getString("loai"))) {
+                    a.setLoai("Primary Class");
+                } else {
+                    a.setLoai("Secondary Class"); 
+                }
+            }
+            lvcb.add(a);      
+        }
+        return lvcb;
+    }
+    
+    public static void datVe(Vechuyenbay vcb) throws SQLException, SQLException, SQLException, SQLException {
         Connection conn = JdbcUtils.getConn();
         Statement dv = conn.createStatement();
         dv.executeUpdate("INSERT INTO vechuyenbay (chuyenbay_id, khachhang_id, ghe_id) VALUES (" + vcb.getChuyenbay_id() + ", " + vcb.getKhachhang_id() + ", " + vcb.getGhe_id() + ")");
@@ -238,5 +282,40 @@ public class Utils {
         conn.close();
         
         return lcb;
+    }
+    
+    public static void huyVechuyenbay(Vechuyenbay vcb) throws SQLException {
+        Connection conn = JdbcUtils.getConn();
+        Statement stvcb = conn.createStatement();
+        stvcb.executeUpdate("DELETE FROM vechuyenbay WHERE khachhang_id = " + vcb.getKhachhang_id() + " AND chuyenbay_id = " + vcb.getChuyenbay_id());
+        conn.close();   
+    }
+    
+    public static void doiVechuyenbay(Vechuyenbay vcb) throws SQLException {
+        Connection conn = JdbcUtils.getConn();
+        Statement stvcb = conn.createStatement();
+        stvcb.executeUpdate("UPDATE vechuyenbay SET ghe_id = " + vcb.getKhachhang_id() + " WHERE chuyenbay_id = " + vcb.getChuyenbay_id());            
+        conn.close();
+    }
+    
+    public static void doiGhe(Ghe g) throws SQLException {
+        Connection conn = JdbcUtils.getConn();
+        Statement scsl1 = conn.createStatement();
+        scsl1.executeUpdate("UPDATE ghe SET soluong = " + g.getSl() + " WHERE id_ghe = " + g.getGia());
+        conn.close();
+    }
+    
+    public static List<Ghe> checkDoighe(int sl, String kw) throws SQLException {
+        Connection conn = JdbcUtils.getConn();
+        Statement st = conn.createStatement();
+        ResultSet rs = st.executeQuery("SELECT * FROM ghe WHERE id_ghe = " + kw + " AND soluong = " + sl);
+        List<Ghe> lg = new ArrayList<>();
+        while(rs.next()) {
+            Ghe g = new Ghe();
+            g.setGia(rs.getString("gia"));
+            g.setSoluong(rs.getString("soluong"));
+            lg.add(g);
+        }
+        return lg;
     }
 }
