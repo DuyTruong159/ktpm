@@ -304,7 +304,7 @@ public class Utils {
     public static void doiGhe(Ghe g) throws SQLException {
         Connection conn = JdbcUtils.getConn();
         Statement scsl1 = conn.createStatement();
-        scsl1.executeUpdate("UPDATE ghe SET soluong = " + g.getSl() + " WHERE id_ghe = " + g.getGia());
+        scsl1.executeUpdate("UPDATE ghe SET soluong = " + g.getSl() + " WHERE id_ghe = " + g.getSoluong());
         conn.close();
     }
     

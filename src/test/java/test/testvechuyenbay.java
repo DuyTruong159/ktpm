@@ -37,38 +37,38 @@ public class testvechuyenbay {
     }
     
     @Test
-    public static void testDatve() throws SQLException {
-        Vechuyenbay vcb = new Vechuyenbay("8", "3", "14");
+    public void testDatve() throws SQLException {
+        Vechuyenbay vcb = new Vechuyenbay("7", "3", "11");
         Utils.datVe(vcb);
         
-        List<All> la = Utils.xemVeCb("8", "3");
+        List<All> la = Utils.xemVeCb("7", "3");
         assertEquals(1,la.size());
     }
     
-//    @Test
-//    public static void testDoiVechuyenbay() throws SQLException {
-//        Vechuyenbay vcb = new Vechuyenbay("13", "8");
-//        Utils.doiVechuyenbay(vcb);
-//        
-//        List<All> la = Utils.XemCbByGhe("8", "13");
-//        assertEquals(1,la.size());      
-//    }
-//    
-//    @Test 
-//    public static void testDoighe() throws SQLException {
-//        Ghe g = new Ghe(30, "13");
-//        Utils.doiGhe(g);
-//        
-//        List<Ghe> lg = Utils.checkDoighe(30, "13");
-//        assertEquals(1, lg.size());
-//    }
-//    
-//    @Test
-//    public static void huyVechuyenbay() throws SQLException {
-//        Vechuyenbay vcb = new Vechuyenbay("3", "8");
-//        Utils.huyVechuyenbay(vcb);
-//        
-//        List<All> lvcb = Utils.xemVeCb("8", "3");
-//        assertEquals(0,lvcb.size());
-//    }
+    @Test
+    public void testDoiVechuyenbay() throws SQLException {
+        Vechuyenbay vcb = new Vechuyenbay("12", "7");
+        Utils.doiVechuyenbay(vcb);
+        
+        List<All> la = Utils.XemCbByGhe("7", "12");
+        assertEquals(1,la.size());      
+    }
+    
+    @Test 
+    public void testDoighe() throws SQLException {
+        Ghe g = new Ghe(30, "11");
+        Utils.doiGhe(g);
+        
+        List<Ghe> lg = Utils.checkDoighe(30, "11");
+        assertEquals(1, lg.size());
+    }
+    
+    @Test
+    public void huyVechuyenbay() throws SQLException {
+        Vechuyenbay vcb = new Vechuyenbay("3", "8");
+        Utils.huyVechuyenbay(vcb);
+        
+        List<All> lvcb = Utils.xemVeCb("8", "3");
+        assertEquals(0,lvcb.size());
+    }
 }
