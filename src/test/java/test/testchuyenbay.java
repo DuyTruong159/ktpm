@@ -41,7 +41,7 @@ public class testchuyenbay {
     
     @Test
     public void testAddCb() throws SQLException {
-        Chuyenbay cb = new Chuyenbay("T01", "1", "2", "10 May - 15:42", "4h 00");
+        Chuyenbay cb = new Chuyenbay("T01", "1", "2", "10 May - 15:42", "4h 00m");
         Utils.addCb(cb);
         
         List<Chuyenbay> lcb = Utils.timCb("T01");
@@ -50,19 +50,19 @@ public class testchuyenbay {
     
     @Test 
     public void testUpdateCb() throws SQLException {
-        Chuyenbay cb = new Chuyenbay("T02", "3", "4", "10 May - 15:42", "4h 00");
+        Chuyenbay cb = new Chuyenbay("A08", "13", "12", "10 May - 15:42", "4h 00m");
         Utils.updateCB(cb);
         
-        List<Chuyenbay> lcb = Utils.timCb("T02");
+        List<Chuyenbay> lcb = Utils.timCb("A08");
         assertEquals(1,lcb.size());
     }
     
     @Test 
     public void testDeleteCb() throws SQLException {
-        Chuyenbay cb = new Chuyenbay("T02", "3", "4", "10 May - 15:42", "4h 00");
+        Chuyenbay cb = new Chuyenbay("T01");
         Utils.deleteCb(cb);
         
-        List<Chuyenbay> lcb = Utils.timCb("T02");
+        List<Chuyenbay> lcb = Utils.timCb("T01");
         assertEquals(0,lcb.size());
     }
     
@@ -73,7 +73,7 @@ public class testchuyenbay {
         Utils.addGhe(g1, g2);
         
         List<Ghe> lg = Utils.timGheCb("8");
-        assertEquals(1,lg.size());
+        assertEquals(2,lg.size());
     }
     
     @Test

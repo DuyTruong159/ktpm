@@ -25,7 +25,7 @@ import org.junit.jupiter.api.Test;
  */
 public class testvechuyenbay {
     
-     @BeforeAll
+    @BeforeAll
     public static void setUpClass() throws SQLException {
         Connection conn = JdbcUtils.getConn();
         Statement st = conn.createStatement();
@@ -45,30 +45,30 @@ public class testvechuyenbay {
         assertEquals(1,la.size());
     }
     
-    @Test
-    public static void testDoiVechuyenbay() throws SQLException {
-        Vechuyenbay vcb = new Vechuyenbay("13", "8");
-        Utils.doiVechuyenbay(vcb);
-        
-        List<All> la = Utils.XemCbByGhe("8", "13");
-        assertEquals(1,la.size());      
-    }
-    
-    @Test 
-    public static void testDoighe() throws SQLException {
-        Ghe g = new Ghe(30, "13");
-        Utils.doiGhe(g);
-        
-        List<Ghe> lg = Utils.checkDoighe(30, "13");
-        assertEquals(1, lg.size());
-    }
-    
-    @Test
-    public static void huyVechuyenbay() throws SQLException {
-        Vechuyenbay vcb = new Vechuyenbay("3", "8");
-        Utils.huyVechuyenbay(vcb);
-        
-        List<All> lvcb = Utils.xemVeCb("8", "3");
-        assertEquals(0,lvcb.size());
-    }
+//    @Test
+//    public static void testDoiVechuyenbay() throws SQLException {
+//        Vechuyenbay vcb = new Vechuyenbay("13", "8");
+//        Utils.doiVechuyenbay(vcb);
+//        
+//        List<All> la = Utils.XemCbByGhe("8", "13");
+//        assertEquals(1,la.size());      
+//    }
+//    
+//    @Test 
+//    public static void testDoighe() throws SQLException {
+//        Ghe g = new Ghe(30, "13");
+//        Utils.doiGhe(g);
+//        
+//        List<Ghe> lg = Utils.checkDoighe(30, "13");
+//        assertEquals(1, lg.size());
+//    }
+//    
+//    @Test
+//    public static void huyVechuyenbay() throws SQLException {
+//        Vechuyenbay vcb = new Vechuyenbay("3", "8");
+//        Utils.huyVechuyenbay(vcb);
+//        
+//        List<All> lvcb = Utils.xemVeCb("8", "3");
+//        assertEquals(0,lvcb.size());
+//    }
 }

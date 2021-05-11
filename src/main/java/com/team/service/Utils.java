@@ -67,7 +67,7 @@ public class Utils {
             cb.setArrive(rs.getString("arrive_id"));
             cb.setDepart(rs.getString("depart_id"));
             cb.setDaytime(rs.getString("daytime"));
-            cb.setTimeflight(rs.getString(rs.getString("timeflight")));
+            cb.setTimeflight(rs.getString("timeflight"));
             
             lcb.add(cb);
         }
@@ -79,15 +79,18 @@ public class Utils {
         Statement stu = conn.createStatement();
         stu.executeUpdate("UPDATE chuyenbay SET arrive_id = " + cb.getArrive() + ", depart_id = " + cb.getDepart() +
                             ", daytime = '" + cb.getDaytime() + "', timeflight = '" + cb.getTimeflight() + 
-                            "', ma = '" + cb.getMa() + "' WHERE ma = '" + cb.getMa() + "'");
+                            "' WHERE ma = '" + cb.getMa() + "'");
     }
     
     public static void deleteCb(Chuyenbay cb) throws SQLException {
         Connection conn = JdbcUtils.getConn();
         conn.setAutoCommit(false);
         Statement psg = conn.createStatement();
-        psg.executeUpdate("DELETE FROM chuyenbay WHERE ma = " + cb.getMa());
-        
+        ResultSet rs = psg.executeQuery("SELECT id_chuyenbay FROM chuyenbay WHERE ma like '" + cb.getMa() + "'");
+        while(rs.next()) {
+            Statement st = conn.createStatement();
+            st.executeUpdate("DELETE FROM chuyenbay WHERE id_chuyenbay = " + rs.getString(1));
+        }
         conn.commit();
     }
     

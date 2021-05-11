@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="test.testsearch" time="1.052" tests="2" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="test.testsearch" time="1.569" tests="2" errors="0" skipped="0" failures="0">
   <properties>
     <property name="java.specification.version" value="16"/>
     <property name="sun.jnu.encoding" value="UTF-8"/>
@@ -13,7 +13,7 @@
     <property name="user.country" value="VN"/>
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
     <property name="sun.boot.library.path" value="/Library/Java/JavaVirtualMachines/jdk-16.jdk/Contents/Home/lib"/>
-    <property name="sun.java.command" value="org.apache.maven.surefire.booter.ForkedBooter /Users/duytruong/NetBeansProjects/ktpm/target/surefire 2021-05-10T21-18-33_577-jvmRun1 surefire15581237846270606132tmp surefire_014550752231103644395tmp"/>
+    <property name="sun.java.command" value="org.apache.maven.surefire.booter.ForkedBooter /Users/duytruong/NetBeansProjects/ktpm/target/surefire 2021-05-11T11-20-14_804-jvmRun1 surefire16804884160067450719tmp surefire_012139751870247266872tmp"/>
     <property name="http.nonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
     <property name="jdk.debug" value="release"/>
     <property name="test" value="test.testsearch"/>
@@ -57,6 +57,6 @@
     <property name="socksNonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
     <property name="java.class.version" value="60.0"/>
   </properties>
-  <testcase name="testSearchCbByArrive" classname="test.testsearch" time="0.17"/>
-  <testcase name="testSearchCbByDepart" classname="test.testsearch" time="0.05"/>
+  <testcase name="testSearchCbByArrive" classname="test.testsearch" time="0.226"/>
+  <testcase name="testSearchCbByDepart" classname="test.testsearch" time="0.053"/>
 </testsuite>

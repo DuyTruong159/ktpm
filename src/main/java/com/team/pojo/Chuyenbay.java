@@ -36,7 +36,6 @@ public class Chuyenbay {
         this.depart = depart;
         this.daytime = daytime;
         this.timeflight = timeflight;
-        
     }
     
     public Chuyenbay(String ma) {
